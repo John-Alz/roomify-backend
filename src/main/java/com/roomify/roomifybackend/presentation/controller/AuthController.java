@@ -6,6 +6,8 @@ import com.roomify.roomifybackend.presentation.dto.AuthResponse;
 import com.roomify.roomifybackend.presentation.dto.ProfileResponse;
 import com.roomify.roomifybackend.services.implementation.UserDetailServiceImpl;
 import com.roomify.roomifybackend.services.implementation.UserSerVice;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -42,6 +44,18 @@ public class AuthController {
     @PostMapping("/sign-up")
     public ResponseEntity<AuthResponse> register(@RequestBody @Valid AuthRegisterUserRequest registerUserRequest) {
         return new ResponseEntity<>(this.userDetailService.registerUser(registerUserRequest), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletResponse response) {
+        ResponseCookie jwtCookie = ResponseCookie.from("jwtToken", "")
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(0)
+                .build();
+        response.addHeader(HttpHeaders.SET_COOKIE, jwtCookie.toString());
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/profile")

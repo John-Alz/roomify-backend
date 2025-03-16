@@ -46,6 +46,7 @@ public class SecurityConfig {
                     http.requestMatchers(HttpMethod.PUT, "/method/put").hasAnyRole("RECEPTIONIST");
                     http.requestMatchers(HttpMethod.PATCH, "/method/patch").hasAnyRole("CUSTOMER");
 
+                    //Configurar los endpoints autenticados
                     http.requestMatchers(HttpMethod.GET, "/auth/profile").authenticated();
 
                     //Configurar el resto de endpoints no especificados
