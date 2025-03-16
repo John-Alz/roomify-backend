@@ -8,7 +8,9 @@ import com.roomify.roomifybackend.services.implementation.UserDetailServiceImpl;
 import com.roomify.roomifybackend.services.implementation.UserSerVice;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +26,17 @@ public class AuthController {
 
     @PostMapping("/log-in")
     public ResponseEntity<AuthResponse> login(@RequestBody @Valid AuthLoginRequest userRequest) {
-        return new ResponseEntity<>(this.userDetailService.loginUser(userRequest), HttpStatus.OK);
+        AuthResponse authResponse = this.userDetailService.loginUser(userRequest);
+        ResponseCookie jwtCookie = ResponseCookie.from("jwtToken", authResponse.jwt())
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(3600)
+                .sameSite("Strict")
+                .build();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                .body(authResponse);
     }
 
     @PostMapping("/sign-up")
@@ -35,6 +47,7 @@ public class AuthController {
     @GetMapping("/profile")
     public ResponseEntity<ProfileResponse> profile(Authentication authentication) {
         String email = authentication.getPrincipal().toString();
+        System.out.println("email found: " + email);
         ProfileResponse profileResponse = userSerVice.getProfile(email);
         return ResponseEntity.ok(profileResponse);
     }
