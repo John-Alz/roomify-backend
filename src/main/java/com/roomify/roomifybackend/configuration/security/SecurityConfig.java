@@ -40,10 +40,13 @@ public class SecurityConfig {
                     http.requestMatchers(HttpMethod.POST, "/auth/**").permitAll();
                     http.requestMatchers(HttpMethod.GET, "/method/get").permitAll();
 
+
                     //Configurar los endpoints privados
                     http.requestMatchers(HttpMethod.POST, "/method/post").hasAnyRole("ADMIN");
                     http.requestMatchers(HttpMethod.PUT, "/method/put").hasAnyRole("RECEPTIONIST");
                     http.requestMatchers(HttpMethod.PATCH, "/method/patch").hasAnyRole("CUSTOMER");
+
+                    http.requestMatchers(HttpMethod.GET, "/auth/profile").authenticated();
 
                     //Configurar el resto de endpoints no especificados
                     http.anyRequest().denyAll();
