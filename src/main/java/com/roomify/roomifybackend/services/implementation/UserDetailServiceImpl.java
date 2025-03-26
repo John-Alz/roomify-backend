@@ -1,17 +1,14 @@
 package com.roomify.roomifybackend.services.implementation;
 
-import com.roomify.roomifybackend.presentation.dto.AuthLoginRequest;
-import com.roomify.roomifybackend.presentation.dto.AuthRegisterUserRequest;
-import com.roomify.roomifybackend.presentation.dto.AuthResponse;
+import com.roomify.roomifybackend.presentation.dto.request.AuthLoginRequest;
+import com.roomify.roomifybackend.presentation.dto.request.AuthRegisterUserRequest;
+import com.roomify.roomifybackend.presentation.dto.response.AuthResponse;
 import com.roomify.roomifybackend.persistence.entity.RoleEntity;
 import com.roomify.roomifybackend.persistence.entity.UserEntity;
 import com.roomify.roomifybackend.persistence.repository.RoleRepository;
 import com.roomify.roomifybackend.persistence.repository.UserRepository;
 import com.roomify.roomifybackend.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

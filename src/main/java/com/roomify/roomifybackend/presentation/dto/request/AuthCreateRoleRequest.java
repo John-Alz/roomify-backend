@@ -1,4 +1,4 @@
-package com.roomify.roomifybackend.presentation.dto;
+package com.roomify.roomifybackend.presentation.dto.request;
 
 import jakarta.validation.constraints.Size;
 import org.springframework.validation.annotation.Validated;

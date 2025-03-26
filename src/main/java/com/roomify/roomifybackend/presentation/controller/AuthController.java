@@ -1,12 +1,11 @@
 package com.roomify.roomifybackend.presentation.controller;
 
-import com.roomify.roomifybackend.presentation.dto.AuthLoginRequest;
-import com.roomify.roomifybackend.presentation.dto.AuthRegisterUserRequest;
-import com.roomify.roomifybackend.presentation.dto.AuthResponse;
-import com.roomify.roomifybackend.presentation.dto.ProfileResponse;
+import com.roomify.roomifybackend.presentation.dto.request.AuthLoginRequest;
+import com.roomify.roomifybackend.presentation.dto.request.AuthRegisterUserRequest;
+import com.roomify.roomifybackend.presentation.dto.response.AuthResponse;
+import com.roomify.roomifybackend.presentation.dto.response.ProfileResponse;
 import com.roomify.roomifybackend.services.implementation.UserDetailServiceImpl;
 import com.roomify.roomifybackend.services.implementation.UserSerVice;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

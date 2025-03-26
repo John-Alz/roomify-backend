@@ -1,7 +1,7 @@
 package com.roomify.roomifybackend.services.implementation;
 
 import com.roomify.roomifybackend.persistence.repository.UserRepository;
-import com.roomify.roomifybackend.presentation.dto.ProfileResponse;
+import com.roomify.roomifybackend.presentation.dto.response.ProfileResponse;
 import com.roomify.roomifybackend.services.interfaces.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

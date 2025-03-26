@@ -1,4 +1,4 @@
-package com.roomify.roomifybackend.presentation.dto;
+package com.roomify.roomifybackend.presentation.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 

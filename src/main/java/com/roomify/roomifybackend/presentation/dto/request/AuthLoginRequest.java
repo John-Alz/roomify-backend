@@ -1,4 +1,4 @@
-package com.roomify.roomifybackend.presentation.dto;
+package com.roomify.roomifybackend.presentation.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 
