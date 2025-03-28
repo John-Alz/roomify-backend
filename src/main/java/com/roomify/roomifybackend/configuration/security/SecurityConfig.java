@@ -51,6 +51,9 @@ public class SecurityConfig {
 
                     //Configurar los endpoints privados
                     http.requestMatchers(HttpMethod.POST, "/api/v1/rooms").permitAll();
+                    http.requestMatchers(HttpMethod.GET, "/api/v1/rooms/**").permitAll();
+                    http.requestMatchers(HttpMethod.GET, "/api/v1/rooms/**").permitAll();
+                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/rooms/**").permitAll();
                     http.requestMatchers(HttpMethod.POST, "/api/v1/room-type").permitAll();
                     http.requestMatchers(HttpMethod.POST, "/method/post").hasAnyRole("ADMIN");
                     http.requestMatchers(HttpMethod.PUT, "/method/put").hasAnyRole("RECEPTIONIST");

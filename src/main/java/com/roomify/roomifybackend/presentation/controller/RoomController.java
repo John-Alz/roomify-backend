@@ -1,16 +1,16 @@
 package com.roomify.roomifybackend.presentation.controller;
 
 
+import com.roomify.roomifybackend.persistence.entity.PageResult;
 import com.roomify.roomifybackend.presentation.dto.request.SaveRoomRequest;
+import com.roomify.roomifybackend.presentation.dto.response.DeleteResponse;
+import com.roomify.roomifybackend.presentation.dto.response.RoomResponse;
 import com.roomify.roomifybackend.presentation.dto.response.SaveResponse;
 import com.roomify.roomifybackend.services.interfaces.IRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/rooms")
@@ -22,5 +22,23 @@ public class RoomController {
     @PostMapping
     public ResponseEntity<SaveResponse> saveRoom(@RequestBody SaveRoomRequest saveRoomRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(roomService.saveRoom(saveRoomRequest));
+    }
+
+    @GetMapping
+    public ResponseEntity<PageResult<RoomResponse>> getRooms(Integer page, Integer size){
+        PageResult<RoomResponse> rooms = roomService.getAllRooms(page, size);
+        return ResponseEntity.ok(rooms);
+    }
+
+    @GetMapping("/{roomId}")
+    public ResponseEntity<RoomResponse> getRoomById(@PathVariable("roomId") Long roomId) {
+        RoomResponse room = roomService.getRoomById(roomId);
+        return ResponseEntity.ok(room);
+    }
+
+    @DeleteMapping("/{roomId}")
+    public ResponseEntity<DeleteResponse> deleteRoomByID(@PathVariable("roomId") Long roomId) {
+        DeleteResponse response = roomService.deleteRoom(roomId);
+        return ResponseEntity.ok(response);
     }
 }
