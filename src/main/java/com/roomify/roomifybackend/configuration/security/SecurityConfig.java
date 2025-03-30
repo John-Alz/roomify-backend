@@ -1,6 +1,7 @@
 package com.roomify.roomifybackend.configuration.security;
 
 import com.roomify.roomifybackend.configuration.security.filter.JwtTokenValidator;
+import com.roomify.roomifybackend.utils.ApiPaths;
 import com.roomify.roomifybackend.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -50,11 +51,20 @@ public class SecurityConfig {
 
 
                     //Configurar los endpoints privados
-                    http.requestMatchers(HttpMethod.POST, "/api/v1/rooms").permitAll();
-                    http.requestMatchers(HttpMethod.GET, "/api/v1/rooms/**").permitAll();
-                    http.requestMatchers(HttpMethod.GET, "/api/v1/rooms/**").permitAll();
-                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/rooms/**").permitAll();
-                    http.requestMatchers(HttpMethod.POST, "/api/v1/room-type").permitAll();
+                    http.requestMatchers(HttpMethod.POST, ApiPaths.ROOMS).permitAll();
+                    http.requestMatchers(HttpMethod.GET, ApiPaths.ROOMS).permitAll();
+                    http.requestMatchers(HttpMethod.GET, ApiPaths.ROOM_BY_ID).permitAll();
+                    http.requestMatchers(HttpMethod.PUT, ApiPaths.ROOM_BY_ID).permitAll();
+                    http.requestMatchers(HttpMethod.DELETE, ApiPaths.ROOM_BY_ID).permitAll();
+
+                    //RoomsTypes
+                    http.requestMatchers(HttpMethod.POST, ApiPaths.ROOMS_TYPES).permitAll();
+                    http.requestMatchers(HttpMethod.GET, ApiPaths.ROOMS_TYPES).permitAll();
+                    http.requestMatchers(HttpMethod.GET, ApiPaths.ROOM_TYPE_BY_ID).permitAll();
+                    http.requestMatchers(HttpMethod.PUT, ApiPaths.ROOM_TYPE_BY_ID).permitAll();
+                    http.requestMatchers(HttpMethod.DELETE, ApiPaths.ROOM_TYPE_BY_ID).permitAll();
+
+
                     http.requestMatchers(HttpMethod.POST, "/method/post").hasAnyRole("ADMIN");
                     http.requestMatchers(HttpMethod.PUT, "/method/put").hasAnyRole("RECEPTIONIST");
                     http.requestMatchers(HttpMethod.PATCH, "/method/patch").hasAnyRole("CUSTOMER");

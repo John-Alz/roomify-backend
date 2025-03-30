@@ -16,5 +16,7 @@ public interface IRoomService {
 
     DeleteResponse deleteRoom(Long roomId);
 
+    RoomResponse updateRoom(Long roomId, SaveRoomRequest saveRoomRequest);
+
 
 }

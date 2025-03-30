@@ -2,12 +2,14 @@ package com.roomify.roomifybackend.services.implementation;
 
 import com.roomify.roomifybackend.persistence.entity.PageResult;
 import com.roomify.roomifybackend.persistence.entity.RoomEntity;
+import com.roomify.roomifybackend.persistence.entity.RoomTypeEntity;
 import com.roomify.roomifybackend.persistence.repository.RoomRepository;
 import com.roomify.roomifybackend.presentation.dto.request.SaveRoomRequest;
 import com.roomify.roomifybackend.presentation.dto.response.DeleteResponse;
 import com.roomify.roomifybackend.presentation.dto.response.RoomResponse;
 import com.roomify.roomifybackend.presentation.dto.response.SaveResponse;
 import com.roomify.roomifybackend.presentation.mappers.RoomMapper;
+import com.roomify.roomifybackend.services.exception.NoExistException;
 import com.roomify.roomifybackend.services.interfaces.IRoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -48,12 +50,41 @@ public class RoomServiceImpl implements IRoomService {
     @Override
     public RoomResponse getRoomById(Long roomId) {
         RoomEntity room = roomRepository.findById(roomId).orElse(null);
+        if (room == null) {
+            throw new NoExistException("Habitacion no encontrada");
+        }
         return roomMapper.toResponse(room);
     }
 
     @Override
     public DeleteResponse deleteRoom(Long roomId) {
+        RoomEntity room = roomRepository.findById(roomId).orElse(null);
+        if (room == null) {
+            throw new NoExistException("Habitacion no encontrada");
+        }
         roomRepository.deleteById(roomId);
         return new DeleteResponse("Habitacion eliminada", LocalDate.now());
+    }
+
+    @Override
+    public RoomResponse updateRoom(Long roomId, SaveRoomRequest saveRoomRequest) {
+
+        RoomEntity roomFound = roomRepository.findById(roomId).orElse(null);
+
+        if (roomFound == null) {
+            throw new NoExistException("Habitacion no encontrada");
+        }
+
+        roomFound.setRoom_rumber(saveRoomRequest.room_number());
+        roomFound.setRoom_description(saveRoomRequest.room_description());
+        roomFound.setRoom_images(saveRoomRequest.room_images());
+        roomFound.setRoom_availability(saveRoomRequest.room_availability());
+        roomFound.setRoom_capacity(saveRoomRequest.room_capacity());
+        roomFound.setRoom_price(saveRoomRequest.room_price());
+        roomFound.setRoom_type(new RoomTypeEntity(saveRoomRequest.room_type_id(), null, null));
+
+        roomRepository.save(roomFound);
+
+        return roomMapper.toResponse(roomFound);
     }
 }
