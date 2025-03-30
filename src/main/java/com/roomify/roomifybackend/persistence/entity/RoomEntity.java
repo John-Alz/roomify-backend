@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -31,4 +32,8 @@ public class RoomEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "room_type_id")
     private RoomTypeEntity room_type;
+
+    @ManyToMany(fetch = FetchType.EAGER, targetEntity = AmenityEntity.class)
+    @JoinTable(name = "habitacion_amenidad", joinColumns = @JoinColumn(name = "habitacion_id"), inverseJoinColumns = @JoinColumn(name = "amenidad_id"))
+    private Set<AmenityEntity> amenities;
 }
