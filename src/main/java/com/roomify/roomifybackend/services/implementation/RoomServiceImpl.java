@@ -1,5 +1,6 @@
 package com.roomify.roomifybackend.services.implementation;
 
+import com.roomify.roomifybackend.persistence.entity.AmenityEntity;
 import com.roomify.roomifybackend.persistence.entity.PageResult;
 import com.roomify.roomifybackend.persistence.entity.RoomEntity;
 import com.roomify.roomifybackend.persistence.entity.RoomTypeEntity;
@@ -19,6 +20,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -82,7 +85,10 @@ public class RoomServiceImpl implements IRoomService {
         roomFound.setRoom_capacity(saveRoomRequest.room_capacity());
         roomFound.setRoom_price(saveRoomRequest.room_price());
         roomFound.setRoom_type(new RoomTypeEntity(saveRoomRequest.room_type_id(), null, null));
-
+        Set<AmenityEntity> updatedAmenities = saveRoomRequest.amenities_id().stream()
+                        .map(id -> new AmenityEntity(id, null, null))
+                        .collect(Collectors.toSet());
+        roomFound.setAmenities(updatedAmenities);
         roomRepository.save(roomFound);
 
         return roomMapper.toResponse(roomFound);

@@ -1,5 +1,6 @@
 package com.roomify.roomifybackend.presentation.mappers;
 
+import com.roomify.roomifybackend.persistence.entity.AmenityEntity;
 import com.roomify.roomifybackend.persistence.entity.RoomEntity;
 import com.roomify.roomifybackend.persistence.entity.RoomTypeEntity;
 import com.roomify.roomifybackend.presentation.dto.request.SaveRoomRequest;
@@ -21,6 +22,9 @@ public class RoomMapper {
                 .room_capacity(saveRoomRequest.room_capacity())
                 .room_price(saveRoomRequest.room_price())
                 .room_type(new RoomTypeEntity(saveRoomRequest.room_type_id(), null, null))
+                .amenities(saveRoomRequest.amenities_id().stream()
+                        .map(id -> new AmenityEntity(id, null, null))
+                        .collect(Collectors.toSet()))
                 .build();
     }
 
@@ -33,7 +37,8 @@ public class RoomMapper {
                 room.getRoom_availability(),
                 room.getRoom_capacity(),
                 room.getRoom_price(),
-                room.getRoom_type().getName()
+                room.getRoom_type().getName(),
+                room.getAmenities()
         );
     }
 
