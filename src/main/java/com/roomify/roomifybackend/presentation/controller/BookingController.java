@@ -3,6 +3,7 @@ package com.roomify.roomifybackend.presentation.controller;
 import com.roomify.roomifybackend.persistence.entity.PageResult;
 import com.roomify.roomifybackend.presentation.dto.request.SaveBookingRequest;
 import com.roomify.roomifybackend.presentation.dto.response.BookingResponse;
+import com.roomify.roomifybackend.presentation.dto.response.DeleteResponse;
 import com.roomify.roomifybackend.presentation.dto.response.SaveResponse;
 import com.roomify.roomifybackend.services.interfaces.IBookingService;
 import lombok.RequiredArgsConstructor;
@@ -38,5 +39,11 @@ public class BookingController {
     public ResponseEntity<BookingResponse> updateBooking(@PathVariable Long id, @RequestBody SaveBookingRequest saveBookingRequest) {
         BookingResponse booking = bookingService.updateBooking(id, saveBookingRequest);
         return ResponseEntity.ok(booking);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<DeleteResponse> deleteBooking(@PathVariable Long id) {
+        DeleteResponse deleteResponse = bookingService.deleteBooking(id);
+        return ResponseEntity.ok(deleteResponse);
     }
 }

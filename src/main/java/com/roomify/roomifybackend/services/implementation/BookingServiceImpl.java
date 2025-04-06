@@ -9,13 +9,13 @@ import com.roomify.roomifybackend.persistence.repository.RoomRepository;
 import com.roomify.roomifybackend.persistence.repository.UserRepository;
 import com.roomify.roomifybackend.presentation.dto.request.SaveBookingRequest;
 import com.roomify.roomifybackend.presentation.dto.response.BookingResponse;
-import com.roomify.roomifybackend.presentation.dto.response.RoomResponse;
+import com.roomify.roomifybackend.presentation.dto.response.DeleteResponse;
 import com.roomify.roomifybackend.presentation.dto.response.SaveResponse;
 import com.roomify.roomifybackend.presentation.mappers.BookingMapper;
-import com.roomify.roomifybackend.services.exception.CheckInInvalidException;
-import com.roomify.roomifybackend.services.exception.CheckOutInvalidException;
 import com.roomify.roomifybackend.services.exception.NoExistException;
 import com.roomify.roomifybackend.services.interfaces.IBookingService;
+import com.roomify.roomifybackend.utils.helpers.BookingHelper;
+import com.roomify.roomifybackend.utils.validator.BookingValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,9 +24,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -37,32 +37,28 @@ public class BookingServiceImpl implements IBookingService {
     private final RoomRepository roomRepository;
     private final BookingMapper bookingMapper;
 
+    public Set<RoomEntity> findRooms(SaveBookingRequest request) {
+        return request.rooms().stream()
+                .map(id -> roomRepository.findById(id).orElseThrow(() -> new NoExistException("Habitacion no encontrada")))
+                .collect(Collectors.toSet());
+    }
+
     @Override
     public SaveResponse saveBooking(SaveBookingRequest saveBookingRequest) {
 
         UserEntity userFound = userRepository.findById(saveBookingRequest.clientId()).orElse(null);
-        Set<RoomEntity> roomsFound = saveBookingRequest.rooms().stream()
-                .map(id -> roomRepository.findById(id).orElseThrow(() -> new NoExistException("Habitacion no encontrada")))
-                .collect(Collectors.toSet());
 
         if (userFound == null) {
             throw new NoExistException("Usuario no encontrado");
         }
 
-        if (saveBookingRequest.checkInDate().equals(LocalDate.now()) || saveBookingRequest.checkInDate().isBefore(LocalDate.now())) {
-            throw new CheckInInvalidException();
-        }
+        Set<RoomEntity> roomsFound = findRooms(saveBookingRequest);
 
-        if (saveBookingRequest.checkOutDate().equals(saveBookingRequest.checkInDate()) || saveBookingRequest.checkOutDate().isBefore(saveBookingRequest.checkInDate())) {
-            throw new CheckOutInvalidException();
-        }
+        BookingValidator.verifyDates(saveBookingRequest.checkInDate(), saveBookingRequest.checkOutDate());
 
         BookingEntity booking = bookingMapper.toBookingEntity(saveBookingRequest, userFound, roomsFound);
 
-        float totalBookingPrice = 0;
-        for(RoomEntity room : roomsFound) {
-            totalBookingPrice += room.getRoom_price();
-        }
+        float totalBookingPrice = BookingHelper.calculateTotalPrice(roomsFound);
 
         booking.setTotalPrice(totalBookingPrice);
 
@@ -103,17 +99,30 @@ public class BookingServiceImpl implements IBookingService {
         if (bookingFound == null) {
             throw new NoExistException("Esa reserva no existe.");
         }
-        Set<RoomEntity> roomsFound = saveBookingRequest.rooms().stream()
-                .map(id -> roomRepository.findById(id).orElseThrow(() -> new NoExistException("Habitacion no encontrada")))
-                .collect(Collectors.toSet());
+
+        BookingValidator.verifyDates(saveBookingRequest.checkInDate(), saveBookingRequest.checkOutDate());
+
+        Set<RoomEntity> roomsFound = findRooms(saveBookingRequest);
 
         bookingFound.setStatus(saveBookingRequest.status());
         bookingFound.setCheckInDate(saveBookingRequest.checkInDate());
         bookingFound.setCheckOutDate(saveBookingRequest.checkOutDate());
         bookingFound.setRooms(roomsFound);
 
+        float totalPrice = BookingHelper.calculateTotalPrice(roomsFound);
+        bookingFound.setTotalPrice(totalPrice);
+
         bookingRepository.save(bookingFound);
 
         return bookingMapper.toResponse(bookingFound);
     }
+
+    @Override
+    public DeleteResponse deleteBooking(Long bookingId) {
+        bookingRepository.findById(bookingId).orElseThrow(() -> new NoExistException("No existe la reserva con este id."));
+        bookingRepository.deleteById(bookingId);
+        return new DeleteResponse("Reserva eleminada", LocalDate.now());
+    }
+
+
 }
