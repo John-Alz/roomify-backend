@@ -7,6 +7,7 @@ import com.roomify.roomifybackend.presentation.dto.response.AmenityResponse;
 import com.roomify.roomifybackend.presentation.dto.response.DeleteResponse;
 import com.roomify.roomifybackend.presentation.dto.response.SaveResponse;
 import com.roomify.roomifybackend.services.implementation.AmenityServiceImpl;
+import com.roomify.roomifybackend.services.interfaces.IAmenityservice;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class AmenityController {
 
     @Autowired
-    public AmenityServiceImpl amenityService;
+    public IAmenityservice amenityService;
 
     @PostMapping()
     public ResponseEntity<SaveResponse> saveAmenity(@RequestBody SaveAmenityRequest saveAmenityRequest) {

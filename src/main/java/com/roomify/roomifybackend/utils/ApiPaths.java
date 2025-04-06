@@ -13,4 +13,7 @@ public class ApiPaths {
     public static final String AMENITIES = "/api/v1/rooms/amenities";
     public static final String AMENITY_BY_ID = "/api/v1/rooms/amenities/{roomId}";
 
+    public static final String BOOKINGS = "/api/v1/booking";
+    public static final String BOOKING_BY_ID = "/api/v1/booking/{roomId}";
+
 }

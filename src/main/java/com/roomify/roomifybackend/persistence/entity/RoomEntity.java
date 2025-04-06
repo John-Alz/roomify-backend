@@ -25,7 +25,7 @@ public class RoomEntity {
     @CollectionTable(name = "room_image", joinColumns = @JoinColumn(name = "room_id"))
     @Column(name = "image_url")
     private List<String> room_images;
-    private String room_availability;
+    private RoomStatus room_availability;
     private int room_capacity;
     private float room_price;
 

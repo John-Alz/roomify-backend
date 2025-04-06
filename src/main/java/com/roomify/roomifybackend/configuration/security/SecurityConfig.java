@@ -71,6 +71,13 @@ public class SecurityConfig {
                     http.requestMatchers(HttpMethod.PUT, ApiPaths.AMENITY_BY_ID).permitAll();
                     http.requestMatchers(HttpMethod.DELETE, ApiPaths.AMENITY_BY_ID).permitAll();
 
+                    //Bookings
+                    http.requestMatchers(HttpMethod.POST, ApiPaths.BOOKINGS).permitAll();
+                    http.requestMatchers(HttpMethod.GET, ApiPaths.BOOKINGS).permitAll();
+                    http.requestMatchers(HttpMethod.GET, ApiPaths.BOOKING_BY_ID).permitAll();
+                    http.requestMatchers(HttpMethod.PUT, ApiPaths.BOOKING_BY_ID).permitAll();
+                    http.requestMatchers(HttpMethod.DELETE, ApiPaths.BOOKING_BY_ID).permitAll();
+
 
                     http.requestMatchers(HttpMethod.POST, "/method/post").hasAnyRole("ADMIN");
                     http.requestMatchers(HttpMethod.PUT, "/method/put").hasAnyRole("RECEPTIONIST");

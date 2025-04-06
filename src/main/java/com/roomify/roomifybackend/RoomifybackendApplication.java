@@ -1,6 +1,5 @@
 package com.roomify.roomifybackend;
 
-//import com.roomify.roomifybackend.persistence.entity.PermissionEntity;
 import com.roomify.roomifybackend.persistence.entity.RoleEntity;
 import com.roomify.roomifybackend.persistence.entity.RoleEnum;
 import com.roomify.roomifybackend.persistence.entity.UserEntity;
