@@ -12,10 +12,12 @@ import com.roomify.roomifybackend.presentation.dto.response.SaveResponse;
 import com.roomify.roomifybackend.presentation.mappers.RoomMapper;
 import com.roomify.roomifybackend.services.exception.NoExistException;
 import com.roomify.roomifybackend.services.interfaces.IRoomService;
+import com.roomify.roomifybackend.specification.SearchRoomSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -37,9 +39,14 @@ public class RoomServiceImpl implements IRoomService {
     }
 
     @Override
-    public PageResult<RoomResponse> getAllRooms(Integer page, Integer size) {
+    public PageResult<RoomResponse> getAllRooms(Integer page, Integer size, boolean orderAsc, String roomType, Integer roomCapacity) {
+
+//        Sort sort = orderAsc ? Sort.by("room_name").ascending() : Sort.by("room_name").descending();
+
+        SearchRoomSpecification spec = new SearchRoomSpecification(roomType, roomCapacity);
+
         Pageable paging = PageRequest.of(page, size);
-        Page<RoomEntity> roomPage = roomRepository.findAll(paging);
+        Page<RoomEntity> roomPage = roomRepository.findAll(spec, paging);
         List<RoomResponse> roomsList = roomMapper.toResponseList(roomPage.getContent());
         return new PageResult<>(
                 roomsList,
@@ -86,7 +93,7 @@ public class RoomServiceImpl implements IRoomService {
         roomFound.setRoom_price(saveRoomRequest.room_price());
         roomFound.setRoom_type(new RoomTypeEntity(saveRoomRequest.room_type_id(), null, null));
         Set<AmenityEntity> updatedAmenities = saveRoomRequest.amenities_id().stream()
-                        .map(id -> new AmenityEntity(id, null, null))
+                        .map(id -> new AmenityEntity(id, null, null, null))
                         .collect(Collectors.toSet());
         roomFound.setAmenities(updatedAmenities);
         roomRepository.save(roomFound);

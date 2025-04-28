@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -30,7 +31,8 @@ public class BookingEntity {
     private BookingStatus status;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
-    private float totalPrice;
+
+    private BigDecimal totalPrice;
 
     @ManyToMany(fetch = FetchType.EAGER, targetEntity = RoomEntity.class)
     @JoinTable(name = "booking_room", joinColumns =  @JoinColumn(name = "booking_id"), inverseJoinColumns = @JoinColumn(name = "room_id"))

@@ -87,7 +87,7 @@ public class SecurityConfig {
                     http.requestMatchers(HttpMethod.GET, "/auth/profile").authenticated();
 
                     //Configurar el resto de endpoints no especificados
-                    http.anyRequest().denyAll();
+                    http.anyRequest().permitAll();
                 })
                 .addFilterBefore(new JwtTokenValidator(jwtUtils), BasicAuthenticationFilter.class) //Agregamos el filtro que creamos, pero antes del filtro BasicAuthenticationFilter
                 .exceptionHandling(exception ->

@@ -22,8 +22,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -58,7 +62,10 @@ public class BookingServiceImpl implements IBookingService {
 
         BookingEntity booking = bookingMapper.toBookingEntity(saveBookingRequest, userFound, roomsFound);
 
-        float totalBookingPrice = BookingHelper.calculateTotalPrice(roomsFound);
+        Long daysBetween = ChronoUnit.DAYS.between(saveBookingRequest.checkInDate(), saveBookingRequest.checkOutDate());
+
+        System.out.println(daysBetween);
+        BigDecimal totalBookingPrice = BookingHelper.calculateTotalPrice(roomsFound, daysBetween);
 
         booking.setTotalPrice(totalBookingPrice);
 
@@ -109,7 +116,11 @@ public class BookingServiceImpl implements IBookingService {
         bookingFound.setCheckOutDate(saveBookingRequest.checkOutDate());
         bookingFound.setRooms(roomsFound);
 
-        float totalPrice = BookingHelper.calculateTotalPrice(roomsFound);
+        Long daysBetween = ChronoUnit.DAYS.between(saveBookingRequest.checkInDate(), saveBookingRequest.checkOutDate());
+
+        System.out.println(daysBetween);
+
+        BigDecimal totalPrice = BookingHelper.calculateTotalPrice(roomsFound, daysBetween);
         bookingFound.setTotalPrice(totalPrice);
 
         bookingRepository.save(bookingFound);

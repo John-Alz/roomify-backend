@@ -16,5 +16,6 @@ public class AmenityEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String name;
+    String image;
     String description;
 }

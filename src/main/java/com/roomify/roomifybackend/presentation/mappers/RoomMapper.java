@@ -16,14 +16,17 @@ public class RoomMapper {
     public RoomEntity toEntity(SaveRoomRequest saveRoomRequest) {
         return  RoomEntity.builder()
                 .room_rumber(saveRoomRequest.room_number())
+                .room_name(saveRoomRequest.room_name())
                 .room_description(saveRoomRequest.room_description())
+                .roomsCount(saveRoomRequest.rooms())
+                .bathRoomsCount(saveRoomRequest.bathRooms())
                 .room_images(saveRoomRequest.room_images())
                 .room_availability(saveRoomRequest.room_availability())
                 .room_capacity(saveRoomRequest.room_capacity())
                 .room_price(saveRoomRequest.room_price())
                 .room_type(new RoomTypeEntity(saveRoomRequest.room_type_id(), null, null))
                 .amenities(saveRoomRequest.amenities_id().stream()
-                        .map(id -> new AmenityEntity(id, null, null))
+                        .map(id -> new AmenityEntity(id,null, null, null))
                         .collect(Collectors.toSet()))
                 .build();
     }
@@ -32,7 +35,10 @@ public class RoomMapper {
         return new RoomResponse(
                 room.getId(),
                 room.getRoom_rumber(),
+                room.getRoom_name(),
                 room.getRoom_description(),
+                room.getRoomsCount(),
+                room.getBathRoomsCount(),
                 room.getRoom_images(),
                 room.getRoom_availability(),
                 room.getRoom_capacity(),

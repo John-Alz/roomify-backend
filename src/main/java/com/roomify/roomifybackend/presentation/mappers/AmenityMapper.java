@@ -14,6 +14,7 @@ public class AmenityMapper {
     public AmenityEntity toEntity(SaveAmenityRequest request) {
         return AmenityEntity.builder()
                 .name(request.name())
+                .image(request.img())
                 .description(request.description())
                 .build();
     }
@@ -22,6 +23,7 @@ public class AmenityMapper {
         return new AmenityResponse(
                 entity.getId(),
                 entity.getName(),
+                entity.getImage(),
                 entity.getDescription()
         );
     }

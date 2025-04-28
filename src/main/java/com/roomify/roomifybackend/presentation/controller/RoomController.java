@@ -25,8 +25,13 @@ public class RoomController {
     }
 
     @GetMapping
-    public ResponseEntity<PageResult<RoomResponse>> getRooms(Integer page, Integer size){
-        PageResult<RoomResponse> rooms = roomService.getAllRooms(page, size);
+    public ResponseEntity<PageResult<RoomResponse>> getRooms(
+            @RequestParam Integer page,
+            @RequestParam Integer size,
+            @RequestParam boolean orderAsc,
+            @RequestParam(required = false) String roomType,
+            @RequestParam(required = false) Integer roomCapacity){
+        PageResult<RoomResponse> rooms = roomService.getAllRooms(page, size, orderAsc, roomType, roomCapacity);
         return ResponseEntity.ok(rooms);
     }
 
