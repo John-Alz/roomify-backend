@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -39,11 +40,21 @@ public class RoomServiceImpl implements IRoomService {
     }
 
     @Override
-    public PageResult<RoomResponse> getAllRooms(Integer page, Integer size, boolean orderAsc, String roomType, Integer roomCapacity) {
-
+    public PageResult<RoomResponse> getAllRooms(
+            Integer page,
+            Integer size,
+            boolean orderAsc,
+            String roomType,
+            Integer roomCapacity,
+            LocalDate checkIn, LocalDate checkOut,
+            BigDecimal minPrice,
+            BigDecimal maxPrice,
+            Long amenityId) {
 //        Sort sort = orderAsc ? Sort.by("room_name").ascending() : Sort.by("room_name").descending();
 
-        SearchRoomSpecification spec = new SearchRoomSpecification(roomType, roomCapacity);
+        System.out.println("minPrice: " + minPrice);
+
+        SearchRoomSpecification spec = new SearchRoomSpecification(roomType, roomCapacity, checkIn, checkOut, minPrice, maxPrice, amenityId);
 
         Pageable paging = PageRequest.of(page, size);
         Page<RoomEntity> roomPage = roomRepository.findAll(spec, paging);

@@ -12,6 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 @RestController
 @RequestMapping("/api/v1/rooms")
 public class RoomController {
@@ -30,8 +33,13 @@ public class RoomController {
             @RequestParam Integer size,
             @RequestParam boolean orderAsc,
             @RequestParam(required = false) String roomType,
-            @RequestParam(required = false) Integer roomCapacity){
-        PageResult<RoomResponse> rooms = roomService.getAllRooms(page, size, orderAsc, roomType, roomCapacity);
+            @RequestParam(required = false) Integer roomCapacity,
+            @RequestParam(required = false) LocalDate checkIn,
+            @RequestParam(required = false) LocalDate checkOut,
+            @RequestParam(required = false) BigDecimal minPrice,
+            @RequestParam(required = false) BigDecimal maxPrice,
+            @RequestParam(required = false) Long amenityId){
+        PageResult<RoomResponse> rooms = roomService.getAllRooms(page, size, orderAsc, roomType, roomCapacity, checkIn, checkOut, minPrice, maxPrice, amenityId);
         return ResponseEntity.ok(rooms);
     }
 

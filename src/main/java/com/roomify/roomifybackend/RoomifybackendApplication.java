@@ -121,7 +121,13 @@ public class RoomifybackendApplication {
 					.description("Atención personalizada y servicio de comida a la habitación.")
 					.build();
 
-			amenityRepository.saveAll(List.of(wifi, piscina, gimnasio, estacionamiento, aireAcondicionado, servicioHabitacion));
+			AmenityEntity prueba = AmenityEntity.builder()
+					.name("Servicio de prueba")
+					.image("https://cdn-icons-png.flaticon.com/128/10322/10322514.png")
+					.description("Atención personalizada y servicio de comida a la habitación.")
+					.build();
+
+			amenityRepository.saveAll(List.of(wifi, piscina, gimnasio, estacionamiento, aireAcondicionado, servicioHabitacion, prueba));
 
 			// Tipos de habitacion.
 
@@ -222,7 +228,7 @@ public class RoomifybackendApplication {
 					.room_capacity(6)
 					.room_price(new BigDecimal("299.999"))
 					.room_type(penthouse)
-					.amenities(Set.of(wifi, piscina, estacionamiento, aireAcondicionado, gimnasio, servicioHabitacion))
+					.amenities(Set.of(wifi, piscina, estacionamiento, aireAcondicionado, gimnasio, servicioHabitacion, prueba))
 					.build();
 
 			RoomEntity room6 = RoomEntity.builder()

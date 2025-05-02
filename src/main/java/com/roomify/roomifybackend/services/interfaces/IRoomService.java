@@ -6,11 +6,14 @@ import com.roomify.roomifybackend.presentation.dto.response.DeleteResponse;
 import com.roomify.roomifybackend.presentation.dto.response.RoomResponse;
 import com.roomify.roomifybackend.presentation.dto.response.SaveResponse;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 public interface IRoomService {
 
     SaveResponse saveRoom(SaveRoomRequest saveRoomRequest);
 
-    PageResult<RoomResponse> getAllRooms(Integer page, Integer size, boolean orderAsc, String roomType, Integer roomCapacity);
+    PageResult<RoomResponse> getAllRooms(Integer page, Integer size, boolean orderAsc, String roomType, Integer roomCapacity, LocalDate checkIn, LocalDate checkOut, BigDecimal minPrice, BigDecimal maxPrice, Long amenityId);
 
     RoomResponse getRoomById(Long roomId);
 
