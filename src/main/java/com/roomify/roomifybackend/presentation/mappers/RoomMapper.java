@@ -24,7 +24,6 @@ public class RoomMapper {
                 .room_availability(saveRoomRequest.room_availability())
                 .room_capacity(saveRoomRequest.room_capacity())
                 .room_price(saveRoomRequest.room_price())
-                .room_type(new RoomTypeEntity(saveRoomRequest.room_type_id(), null, null))
                 .amenities(saveRoomRequest.amenities_id().stream()
                         .map(id -> new AmenityEntity(id,null, null, null))
                         .collect(Collectors.toSet()))

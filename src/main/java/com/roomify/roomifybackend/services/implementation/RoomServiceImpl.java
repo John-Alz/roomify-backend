@@ -102,7 +102,7 @@ public class RoomServiceImpl implements IRoomService {
         roomFound.setRoom_availability(saveRoomRequest.room_availability());
         roomFound.setRoom_capacity(saveRoomRequest.room_capacity());
         roomFound.setRoom_price(saveRoomRequest.room_price());
-        roomFound.setRoom_type(new RoomTypeEntity(saveRoomRequest.room_type_id(), null, null));
+//        roomFound.setRoom_type(new RoomTypeEntity(saveRoomRequest.room_type_id(), null, null));
         Set<AmenityEntity> updatedAmenities = saveRoomRequest.amenities_id().stream()
                         .map(id -> new AmenityEntity(id, null, null, null))
                         .collect(Collectors.toSet());
