@@ -20,26 +20,21 @@ public class BookingEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cliente_id")
     private UserEntity clientId;
 
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = RoomTypeEntity.class)
+    @JoinColumn(name = "room_type_id")
+    private RoomTypeEntity roomType;
+
     private LocalDateTime bookingDate = LocalDateTime.now();
     private BookingStatus status;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
-
     private BigDecimal totalPrice;
-
-    @ManyToMany(fetch = FetchType.EAGER, targetEntity = RoomEntity.class)
-    @JoinTable(name = "booking_room", joinColumns =  @JoinColumn(name = "booking_id"), inverseJoinColumns = @JoinColumn(name = "room_id"))
-    private Set<RoomEntity> rooms;
-
-
-
-
+    private Integer numberOfRoom;
 
 }

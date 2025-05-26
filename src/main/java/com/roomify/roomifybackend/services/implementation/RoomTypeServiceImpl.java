@@ -1,5 +1,6 @@
 package com.roomify.roomifybackend.services.implementation;
 
+import com.roomify.roomifybackend.persistence.entity.FiltersRoomsType;
 import com.roomify.roomifybackend.persistence.entity.PageResult;
 import com.roomify.roomifybackend.persistence.entity.RoomTypeEntity;
 import com.roomify.roomifybackend.persistence.repository.RoomTypeRepository;
@@ -10,6 +11,7 @@ import com.roomify.roomifybackend.presentation.dto.response.SaveResponse;
 import com.roomify.roomifybackend.presentation.mappers.RoomTypeMapper;
 import com.roomify.roomifybackend.services.exception.NoExistException;
 import com.roomify.roomifybackend.services.interfaces.IRoomTypeService;
+import com.roomify.roomifybackend.specification.SearchRoomTypeSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,9 +35,11 @@ public class RoomTypeServiceImpl implements IRoomTypeService {
     }
 
     @Override
-    public PageResult<RoomTypeResponse> getAllRoomType(Integer page, Integer size) {
+    public PageResult<RoomTypeResponse> getAllRoomType(Integer page, Integer size, FiltersRoomsType filtersRoomsType) {
+
+        SearchRoomTypeSpecification spec = new SearchRoomTypeSpecification(filtersRoomsType.roomName() ,filtersRoomsType.roomCapacity(), filtersRoomsType.minPrice(), filtersRoomsType.maxPrice(), filtersRoomsType.amenityId());
         Pageable paging = PageRequest.of(page, size);
-        Page<RoomTypeEntity> roomsTypes = roomTypeRepository.findAll(paging);
+        Page<RoomTypeEntity> roomsTypes = roomTypeRepository.findAll(spec, paging);
         List<RoomTypeResponse> roomTypesList = roomTypeMapper.toListResponse(roomsTypes.getContent());
         return new PageResult<>(
                 roomTypesList,

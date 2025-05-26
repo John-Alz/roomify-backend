@@ -54,10 +54,10 @@ public class RoomServiceImpl implements IRoomService {
 
         System.out.println("minPrice: " + minPrice);
 
-        SearchRoomSpecification spec = new SearchRoomSpecification(roomType, roomCapacity, checkIn, checkOut, minPrice, maxPrice, amenityId);
+//        SearchRoomSpecification spec = new SearchRoomSpecification(roomType, roomCapacity, checkIn, checkOut, minPrice, maxPrice, amenityId);
 
         Pageable paging = PageRequest.of(page, size);
-        Page<RoomEntity> roomPage = roomRepository.findAll(spec, paging);
+        Page<RoomEntity> roomPage = roomRepository.findAll(paging);
         List<RoomResponse> roomsList = roomMapper.toResponseList(roomPage.getContent());
         return new PageResult<>(
                 roomsList,

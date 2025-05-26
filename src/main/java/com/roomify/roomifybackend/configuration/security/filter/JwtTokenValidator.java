@@ -4,6 +4,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.roomify.roomifybackend.utils.JwtUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
@@ -32,9 +33,19 @@ public class JwtTokenValidator extends OncePerRequestFilter { //Simepre se ejecu
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
-        String  jwtToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+
+        String  jwtToken = null;
+
+            if (request.getCookies() != null) {
+                for (Cookie cookie : request.getCookies()) {
+                    if ("jwtToken".equals(cookie.getName())) {
+                        jwtToken = cookie.getValue();
+                    }
+                }
+            }
+
         if(jwtToken != null) { //Bearer kajkjsdieruhsdhduer45
-            jwtToken = jwtToken.substring(7);
+            System.out.println(jwtToken);
 
             DecodedJWT decodedJWT = jwtUtils.verifyToken(jwtToken);
 

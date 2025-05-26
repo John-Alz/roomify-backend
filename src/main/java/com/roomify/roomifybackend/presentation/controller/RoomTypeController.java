@@ -1,5 +1,6 @@
 package com.roomify.roomifybackend.presentation.controller;
 
+import com.roomify.roomifybackend.persistence.entity.FiltersRoomsType;
 import com.roomify.roomifybackend.persistence.entity.PageResult;
 import com.roomify.roomifybackend.presentation.dto.request.SaveRoomTypeRequest;
 import com.roomify.roomifybackend.presentation.dto.response.DeleteResponse;
@@ -24,8 +25,8 @@ public class RoomTypeController {
     }
 
     @GetMapping
-    public ResponseEntity<PageResult<RoomTypeResponse>> getAllRoomTypes(Integer page, Integer size) {
-        PageResult<RoomTypeResponse> roomTypes = roomTypeService.getAllRoomType(page, size);
+    public ResponseEntity<PageResult<RoomTypeResponse>> getAllRoomTypes(Integer page, Integer size,@ModelAttribute FiltersRoomsType filtersRoomsType) {
+        PageResult<RoomTypeResponse> roomTypes = roomTypeService.getAllRoomType(page, size, filtersRoomsType);
         return ResponseEntity.ok(roomTypes);
     }
 

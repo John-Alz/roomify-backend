@@ -2,6 +2,7 @@ package com.roomify.roomifybackend.presentation.mappers;
 
 import com.roomify.roomifybackend.persistence.entity.BookingEntity;
 import com.roomify.roomifybackend.persistence.entity.RoomEntity;
+import com.roomify.roomifybackend.persistence.entity.RoomTypeEntity;
 import com.roomify.roomifybackend.persistence.entity.UserEntity;
 import com.roomify.roomifybackend.presentation.dto.request.SaveBookingRequest;
 import com.roomify.roomifybackend.presentation.dto.response.BookingResponse;
@@ -16,20 +17,24 @@ import java.util.stream.Collectors;
 public class BookingMapper {
 
     private final UserMapper userMapper;
+    private final RoomTypeMapper roomTypeMapper;
 
-    public BookingMapper(UserMapper userMapper) {
+    public BookingMapper(UserMapper userMapper, RoomTypeMapper roomTypeMapper) {
         this.userMapper = userMapper;
+        this.roomTypeMapper = roomTypeMapper;
     }
 
 
-    public BookingEntity toBookingEntity(SaveBookingRequest saveBookingRequest, UserEntity userFound, Set<RoomEntity> roomsFound) {
+    public BookingEntity toBookingEntity(SaveBookingRequest saveBookingRequest, UserEntity userFound, RoomTypeEntity roomTypeFound) {
         return BookingEntity.builder()
                 .clientId(userFound)
+                .roomType(roomTypeFound)
                 .status(saveBookingRequest.status())
                 .bookingDate(LocalDateTime.now())
                 .checkInDate(saveBookingRequest.checkInDate())
                 .checkOutDate(saveBookingRequest.checkOutDate())
-                .rooms(roomsFound)
+                .totalPrice(saveBookingRequest.totalPrice())
+                .numberOfRoom(saveBookingRequest.numberOfRoom())
                 .build();
     }
 
@@ -37,12 +42,14 @@ public class BookingMapper {
         return new BookingResponse(
                 booking.getId(),
                 userMapper.toResponse(booking.getClientId()),
+                roomTypeMapper.toResponse(booking.getRoomType()),
                 booking.getBookingDate(),
                 booking.getStatus(),
                 booking.getCheckInDate(),
                 booking.getCheckOutDate(),
                 booking.getTotalPrice(),
-                booking.getRooms()        );
+                booking.getNumberOfRoom()
+        );
     }
 
     public List<BookingResponse> roomResponseList(List<BookingEntity> bookings) {

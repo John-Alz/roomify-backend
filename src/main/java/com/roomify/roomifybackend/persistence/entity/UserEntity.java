@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,9 +25,16 @@ public class UserEntity {
     @NotBlank
     private String username;
 
+    @NotBlank
+    private String lastName;
+
     @Column(unique = true)
     @Email
     private String email;
+
+    private String phoneNumber;
+
+    private LocalDate birthday;
 
     @NotBlank
     private String password;

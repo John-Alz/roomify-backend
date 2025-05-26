@@ -21,6 +21,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -94,7 +95,10 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
     public AuthResponse registerUser(AuthRegisterUserRequest registerUserRequest) {
         String username = registerUserRequest.username();
+        String lastName = registerUserRequest.lastName();
         String email = registerUserRequest.email();
+        String phoneNumber = registerUserRequest.phoneNumber();
+        LocalDate birthday = registerUserRequest.birthday();
         String password = registerUserRequest.password();
         List<String> roleRequest = registerUserRequest.roleRequest().roles();
         Set<RoleEntity> roleEntitySet = roleRepository.findRoleEntitiesByRoleEnumIn(roleRequest).stream().collect(Collectors.toSet());
@@ -105,7 +109,10 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
         UserEntity userEntity = UserEntity.builder()
                 .username(username)
+                .lastName(lastName)
                 .email(email)
+                .phoneNumber(phoneNumber)
+                .birthday(birthday)
                 .password(passwordEncoder.encode(password))
                 .roles(roleEntitySet)
                 .isEnabled(true)

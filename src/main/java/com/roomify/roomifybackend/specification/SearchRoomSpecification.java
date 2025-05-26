@@ -50,7 +50,7 @@ public class SearchRoomSpecification implements Specification<RoomEntity> {
             Join<BookingEntity, RoomEntity> bookedRoom = booking.join("rooms");
 
             subquery.select(bookedRoom.get("id")).where(
-                    criteriaBuilder.notEqual(booking.get("status"), BookingStatus.CANCELLED),
+//                    criteriaBuilder.notEqual(booking.get("status"), BookingStatus.CANCELLED),
                     criteriaBuilder.lessThan(booking.get("checkInDate"), checkOut),
                     criteriaBuilder.greaterThan(booking.get("checkOutDate"), checkIn)
             );

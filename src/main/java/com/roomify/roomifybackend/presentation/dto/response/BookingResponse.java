@@ -8,5 +8,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-public record BookingResponse(Long id, UserResponse client, LocalDateTime bookingDate, BookingStatus status, LocalDate checkInDate, LocalDate checkOutDate, BigDecimal totalPrice, Set<RoomEntity> rooms) {
+public record BookingResponse(
+        Long id,
+        UserResponse client,
+        RoomTypeResponse RoomType,
+        LocalDateTime bookingDate,
+        BookingStatus status,
+        LocalDate checkInDate,
+        LocalDate checkOutDate,
+        BigDecimal totalPrice,
+        Integer numberOfRoom) {
 }
+

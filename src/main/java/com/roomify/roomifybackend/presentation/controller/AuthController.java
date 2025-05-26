@@ -31,10 +31,10 @@ public class AuthController {
         AuthResponse authResponse = this.userDetailService.loginUser(userRequest);
         ResponseCookie jwtCookie = ResponseCookie.from("jwtToken", authResponse.jwt())
                 .httpOnly(true)
-                .secure(true)
+                .secure(false)
                 .path("/")
                 .maxAge(3600)
-                .sameSite("Strict")
+                .sameSite("Lax")
                 .build();
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())

@@ -12,12 +12,8 @@ public class BookingHelper {
 
     private BookingHelper () {}
 
-    public static BigDecimal calculateTotalPrice(Set<RoomEntity> rooms, Long daysBetween) {
-        BigDecimal totalBookingPrice = BigDecimal.ZERO;
-        for(RoomEntity room : rooms) {
-            totalBookingPrice = totalBookingPrice.add(room.getRoom_price());
-        }
-
+    public static BigDecimal calculateTotalPrice(Integer numberOfRooms, BigDecimal priceRoom, Long daysBetween) {
+        BigDecimal totalBookingPrice = priceRoom.multiply(BigDecimal.valueOf(numberOfRooms));
         return totalBookingPrice.multiply(BigDecimal.valueOf(daysBetween));
     }
 

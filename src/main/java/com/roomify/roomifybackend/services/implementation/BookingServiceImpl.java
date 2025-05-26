@@ -1,11 +1,9 @@
 package com.roomify.roomifybackend.services.implementation;
 
-import com.roomify.roomifybackend.persistence.entity.BookingEntity;
-import com.roomify.roomifybackend.persistence.entity.PageResult;
-import com.roomify.roomifybackend.persistence.entity.RoomEntity;
-import com.roomify.roomifybackend.persistence.entity.UserEntity;
+import com.roomify.roomifybackend.persistence.entity.*;
 import com.roomify.roomifybackend.persistence.repository.BookingRepository;
 import com.roomify.roomifybackend.persistence.repository.RoomRepository;
+import com.roomify.roomifybackend.persistence.repository.RoomTypeRepository;
 import com.roomify.roomifybackend.persistence.repository.UserRepository;
 import com.roomify.roomifybackend.presentation.dto.request.SaveBookingRequest;
 import com.roomify.roomifybackend.presentation.dto.response.BookingResponse;
@@ -38,34 +36,31 @@ public class BookingServiceImpl implements IBookingService {
 
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
-    private final RoomRepository roomRepository;
+    private final RoomTypeRepository roomTypeRepository;
     private final BookingMapper bookingMapper;
-
-    public Set<RoomEntity> findRooms(SaveBookingRequest request) {
-        return request.rooms().stream()
-                .map(id -> roomRepository.findById(id).orElseThrow(() -> new NoExistException("Habitacion no encontrada")))
-                .collect(Collectors.toSet());
-    }
 
     @Override
     public SaveResponse saveBooking(SaveBookingRequest saveBookingRequest) {
 
         UserEntity userFound = userRepository.findById(saveBookingRequest.clientId()).orElse(null);
+        RoomTypeEntity roomTypeFound = roomTypeRepository.findById(saveBookingRequest.roomTypeId()).orElse(null);
 
         if (userFound == null) {
             throw new NoExistException("Usuario no encontrado");
         }
 
-        Set<RoomEntity> roomsFound = findRooms(saveBookingRequest);
+        if (roomTypeFound == null) {
+            throw new NoExistException("Tipo de habitacion no encontrado");
+        }
 
         BookingValidator.verifyDates(saveBookingRequest.checkInDate(), saveBookingRequest.checkOutDate());
 
-        BookingEntity booking = bookingMapper.toBookingEntity(saveBookingRequest, userFound, roomsFound);
+        BookingEntity booking = bookingMapper.toBookingEntity(saveBookingRequest, userFound, roomTypeFound);
 
         Long daysBetween = ChronoUnit.DAYS.between(saveBookingRequest.checkInDate(), saveBookingRequest.checkOutDate());
 
         System.out.println(daysBetween);
-        BigDecimal totalBookingPrice = BookingHelper.calculateTotalPrice(roomsFound, daysBetween);
+        BigDecimal totalBookingPrice = BookingHelper.calculateTotalPrice(booking.getNumberOfRoom(), roomTypeFound.getPrice(), daysBetween);
 
         booking.setTotalPrice(totalBookingPrice);
 
@@ -109,19 +104,19 @@ public class BookingServiceImpl implements IBookingService {
 
         BookingValidator.verifyDates(saveBookingRequest.checkInDate(), saveBookingRequest.checkOutDate());
 
-        Set<RoomEntity> roomsFound = findRooms(saveBookingRequest);
+//        Set<RoomEntity> roomsFound = findRooms(saveBookingRequest);
 
         bookingFound.setStatus(saveBookingRequest.status());
         bookingFound.setCheckInDate(saveBookingRequest.checkInDate());
         bookingFound.setCheckOutDate(saveBookingRequest.checkOutDate());
-        bookingFound.setRooms(roomsFound);
+//        bookingFound.setRooms(roomsFound);
 
         Long daysBetween = ChronoUnit.DAYS.between(saveBookingRequest.checkInDate(), saveBookingRequest.checkOutDate());
 
         System.out.println(daysBetween);
 
-        BigDecimal totalPrice = BookingHelper.calculateTotalPrice(roomsFound, daysBetween);
-        bookingFound.setTotalPrice(totalPrice);
+//        BigDecimal totalPrice = BookingHelper.calculateTotalPrice(roomsFound, daysBetween);
+//        bookingFound.setTotalPrice(totalPrice);
 
         bookingRepository.save(bookingFound);
 
