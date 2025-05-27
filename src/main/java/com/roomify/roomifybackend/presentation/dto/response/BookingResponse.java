@@ -11,6 +11,10 @@ import java.util.Set;
 public record BookingResponse(
         Long id,
         UserResponse client,
+        String name,
+        String lastName,
+        String email,
+        String phoneNumber,
         RoomTypeResponse RoomType,
         LocalDateTime bookingDate,
         BookingStatus status,

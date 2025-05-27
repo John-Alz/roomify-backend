@@ -29,7 +29,7 @@ public class SearchRoomTypeSpecification implements Specification<RoomTypeEntity
 
         List<Predicate> predicates = new ArrayList<>();
 
-        Join<RoomTypeEntity, AmenityEntity> amenityEntityJoin = root.join("amenities");
+
 
         if (roomName != null && !roomName.isEmpty()) {
             Expression roomNameExpression = criteriaBuilder.lower(root.get("name"));
@@ -43,10 +43,10 @@ public class SearchRoomTypeSpecification implements Specification<RoomTypeEntity
         }
 
         if (amenityId != null) {
+            Join<RoomTypeEntity, AmenityEntity> amenityEntityJoin = root.join("amenities");
             Predicate predicate = criteriaBuilder.equal(amenityEntityJoin.get("id"), amenityId);
             predicates.add(predicate);
         }
-
 
         if (minPrice != null && !minPrice.equals(BigDecimal.ZERO)) {
             Predicate priceGreaterThanEqualPredicate = criteriaBuilder.greaterThanOrEqualTo(root.get("price"), minPrice);

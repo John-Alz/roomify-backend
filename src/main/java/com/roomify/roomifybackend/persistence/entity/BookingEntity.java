@@ -25,6 +25,10 @@ public class BookingEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cliente_id")
     private UserEntity clientId;
+    private String name;
+    private String lastName;
+    private String email;
+    private String phoneNumber;
 
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = RoomTypeEntity.class)
     @JoinColumn(name = "room_type_id")

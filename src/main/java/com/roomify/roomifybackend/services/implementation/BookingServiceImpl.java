@@ -42,12 +42,24 @@ public class BookingServiceImpl implements IBookingService {
     @Override
     public SaveResponse saveBooking(SaveBookingRequest saveBookingRequest) {
 
-        UserEntity userFound = userRepository.findById(saveBookingRequest.clientId()).orElse(null);
-        RoomTypeEntity roomTypeFound = roomTypeRepository.findById(saveBookingRequest.roomTypeId()).orElse(null);
+        UserEntity userFound = null;
 
-        if (userFound == null) {
-            throw new NoExistException("Usuario no encontrado");
+        if (saveBookingRequest.clientId() != null) {
+            userFound = userRepository.findById(saveBookingRequest.clientId()).orElse(null);
         }
+        UserEntity userFoundByEmail = userRepository.findByEmail(saveBookingRequest.email()).orElse(null);
+        RoomTypeEntity roomTypeFound = roomTypeRepository.findById(saveBookingRequest.roomTypeId()).orElse(null);
+        Long userId = null;
+
+        if(userFoundByEmail != null) {
+            userId = userFoundByEmail.getId();
+        }
+
+        System.out.println("ENCONTRE EL USER: " + userId);
+
+//        if (userFound == null) {
+//            throw new NoExistException("Usuario no encontrado");
+//        }
 
         if (roomTypeFound == null) {
             throw new NoExistException("Tipo de habitacion no encontrado");

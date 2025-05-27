@@ -9,6 +9,10 @@ import java.util.Set;
 
 public record SaveBookingRequest(
         Long clientId,
+        String name,
+        String lastName,
+        String email,
+        String phoneNumber,
         Long roomTypeId,
         BookingStatus status,
         LocalDate checkInDate,

@@ -13,7 +13,7 @@ public class BookingHelper {
     private BookingHelper () {}
 
     public static BigDecimal calculateTotalPrice(Integer numberOfRooms, BigDecimal priceRoom, Long daysBetween) {
-        BigDecimal totalBookingPrice = priceRoom.multiply(BigDecimal.valueOf(numberOfRooms));
+        BigDecimal totalBookingPrice = priceRoom.multiply(BigDecimal.valueOf(numberOfRooms)).add(BigDecimal.valueOf(20));
         return totalBookingPrice.multiply(BigDecimal.valueOf(daysBetween));
     }
 

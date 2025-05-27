@@ -6,6 +6,7 @@ import com.roomify.roomifybackend.persistence.entity.RoomTypeEntity;
 import com.roomify.roomifybackend.persistence.entity.UserEntity;
 import com.roomify.roomifybackend.presentation.dto.request.SaveBookingRequest;
 import com.roomify.roomifybackend.presentation.dto.response.BookingResponse;
+import com.roomify.roomifybackend.presentation.dto.response.UserResponse;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -28,6 +29,10 @@ public class BookingMapper {
     public BookingEntity toBookingEntity(SaveBookingRequest saveBookingRequest, UserEntity userFound, RoomTypeEntity roomTypeFound) {
         return BookingEntity.builder()
                 .clientId(userFound)
+                .name(saveBookingRequest.name())
+                .lastName(saveBookingRequest.lastName())
+                .email(saveBookingRequest.email())
+                .phoneNumber(saveBookingRequest.phoneNumber())
                 .roomType(roomTypeFound)
                 .status(saveBookingRequest.status())
                 .bookingDate(LocalDateTime.now())
@@ -39,9 +44,19 @@ public class BookingMapper {
     }
 
     public BookingResponse toResponse(BookingEntity booking) {
+        UserResponse user = null;
+        if(booking.getClientId() != null) {
+            user = userMapper.toResponse(booking.getClientId());
+        } else {
+            user = new UserResponse(null, null, null);
+        }
         return new BookingResponse(
                 booking.getId(),
-                userMapper.toResponse(booking.getClientId()),
+                user,
+                booking.getName(),
+                booking.getLastName(),
+                booking.getEmail(),
+                booking.getPhoneNumber(),
                 roomTypeMapper.toResponse(booking.getRoomType()),
                 booking.getBookingDate(),
                 booking.getStatus(),
