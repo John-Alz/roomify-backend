@@ -2,7 +2,6 @@ package com.roomify.roomifybackend.services.implementation;
 
 import com.roomify.roomifybackend.persistence.entity.*;
 import com.roomify.roomifybackend.persistence.repository.BookingRepository;
-import com.roomify.roomifybackend.persistence.repository.RoomRepository;
 import com.roomify.roomifybackend.persistence.repository.RoomTypeRepository;
 import com.roomify.roomifybackend.persistence.repository.UserRepository;
 import com.roomify.roomifybackend.presentation.dto.request.SaveBookingRequest;
@@ -10,26 +9,26 @@ import com.roomify.roomifybackend.presentation.dto.response.BookingResponse;
 import com.roomify.roomifybackend.presentation.dto.response.DeleteResponse;
 import com.roomify.roomifybackend.presentation.dto.response.SaveResponse;
 import com.roomify.roomifybackend.presentation.mappers.BookingMapper;
+import com.roomify.roomifybackend.services.exception.NoAvailabilityException;
 import com.roomify.roomifybackend.services.exception.NoExistException;
 import com.roomify.roomifybackend.services.interfaces.IBookingService;
+import com.roomify.roomifybackend.utils.helpers.DateRangeUtils;
 import com.roomify.roomifybackend.utils.helpers.BookingHelper;
 import com.roomify.roomifybackend.utils.validator.BookingValidator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BookingServiceImpl implements IBookingService {
@@ -38,6 +37,7 @@ public class BookingServiceImpl implements IBookingService {
     private final UserRepository userRepository;
     private final RoomTypeRepository roomTypeRepository;
     private final BookingMapper bookingMapper;
+    private final RoomAvailabilityService roomAvailabilityService;
 
     @Override
     public SaveResponse saveBooking(SaveBookingRequest saveBookingRequest) {
@@ -64,6 +64,21 @@ public class BookingServiceImpl implements IBookingService {
         if (roomTypeFound == null) {
             throw new NoExistException("Tipo de habitacion no encontrado");
         }
+
+        //
+
+//        List<LocalDate> dates = DateRangeUtils.generateDates(saveBookingRequest.checkInDate(), saveBookingRequest.checkOutDate());
+//        for (LocalDate date : dates) {
+//            System.out.println(date.toString());
+//        }
+
+        if (!roomAvailabilityService.existsAvailability(saveBookingRequest)) {
+            throw new NoAvailabilityException();
+        }
+
+        roomAvailabilityService.updateReservationsByDate(saveBookingRequest);
+
+        //
 
         BookingValidator.verifyDates(saveBookingRequest.checkInDate(), saveBookingRequest.checkOutDate());
 

@@ -11,7 +11,7 @@ public record SaveRoomTypeRequest(
         int bathRooms,
         int meters,
         List<String> images,
-        Long quantity_available,
+        int quantity_available,
         int capacity,
         BigDecimal price,
         Set<Long> amenities_id) {
