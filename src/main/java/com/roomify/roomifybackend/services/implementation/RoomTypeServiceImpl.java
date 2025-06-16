@@ -1,9 +1,7 @@
 package com.roomify.roomifybackend.services.implementation;
 
-import com.roomify.roomifybackend.persistence.entity.AmenityEntity;
-import com.roomify.roomifybackend.persistence.entity.FiltersRoomsType;
-import com.roomify.roomifybackend.persistence.entity.PageResult;
-import com.roomify.roomifybackend.persistence.entity.RoomTypeEntity;
+import com.roomify.roomifybackend.persistence.entity.*;
+import com.roomify.roomifybackend.persistence.repository.BookingByDateRepository;
 import com.roomify.roomifybackend.persistence.repository.RoomTypeRepository;
 import com.roomify.roomifybackend.presentation.dto.request.SaveRoomTypeRequest;
 import com.roomify.roomifybackend.presentation.dto.response.DeleteResponse;
@@ -13,6 +11,7 @@ import com.roomify.roomifybackend.presentation.mappers.RoomTypeMapper;
 import com.roomify.roomifybackend.services.exception.NoExistException;
 import com.roomify.roomifybackend.services.interfaces.IRoomTypeService;
 import com.roomify.roomifybackend.specification.SearchRoomTypeSpecification;
+import com.roomify.roomifybackend.utils.helpers.DateRangeUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,23 +28,36 @@ import java.util.stream.Collectors;
 public class RoomTypeServiceImpl implements IRoomTypeService {
 
     private final RoomTypeRepository roomTypeRepository;
+    private final BookingByDateRepository bookingByDateRepository;
     private final RoomTypeMapper roomTypeMapper;
 
     @Override
     public SaveResponse saveRoomType(SaveRoomTypeRequest saveRoomTypeRequest) {
+        System.out.println(saveRoomTypeRequest.price());
         roomTypeRepository.save(roomTypeMapper.toEntity(saveRoomTypeRequest));
         return new SaveResponse("Tipo de habitacion creada", LocalDate.now());
     }
 
     @Override
     public PageResult<RoomTypeResponse> getAllRoomType(Integer page, Integer size, FiltersRoomsType filtersRoomsType) {
-
+        List<LocalDate> dates = DateRangeUtils.generateDates(filtersRoomsType.checkIn(), filtersRoomsType.checkOut());
         SearchRoomTypeSpecification spec = new SearchRoomTypeSpecification(filtersRoomsType.roomName() ,filtersRoomsType.roomCapacity(), filtersRoomsType.minPrice(), filtersRoomsType.maxPrice(), filtersRoomsType.amenityId());
         Pageable paging = PageRequest.of(page, size);
         Page<RoomTypeEntity> roomsTypes = roomTypeRepository.findAll(spec, paging);
         List<RoomTypeResponse> roomTypesList = roomTypeMapper.toListResponse(roomsTypes.getContent());
+        List<RoomTypeResponse> roomTypeListAvailable = roomTypesList.stream()
+                .filter(roomsType -> {
+                    int stock = roomsType.quantity_available();
+                    for (LocalDate date : dates) {
+                        BookingByDateEntity bookingByDateEntity = bookingByDateRepository.findByRoomTypeAndDate(roomsType.id(), date).orElse(null);
+                        int booked = bookingByDateEntity != null ? bookingByDateEntity.getBookingQuantity() : 0;
+                        if (booked >= stock) return false;
+                    }
+                    return true;
+                })
+                .toList();
         return new PageResult<>(
-                roomTypesList,
+                roomTypeListAvailable,
                 roomsTypes.getNumber(),
                 roomsTypes.getSize(),
                 roomsTypes.getTotalPages(),

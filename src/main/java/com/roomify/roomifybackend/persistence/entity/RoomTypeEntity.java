@@ -34,12 +34,13 @@ public class RoomTypeEntity {
     private List<String> images;
     private int quantity_available;
     private int capacity;
+    @Column(precision = 10, scale = 3)
     private BigDecimal price;
 
     @ManyToMany(fetch = FetchType.EAGER, targetEntity = AmenityEntity.class)
     @JoinTable(name = "habitacion_amenidad", joinColumns = @JoinColumn(name = "habitacion_id"), inverseJoinColumns = @JoinColumn(name = "amenidad_id"))
     private Set<AmenityEntity> amenities;
 
-//    private List<String> tags;
+    private List<String> tags;
 
 }

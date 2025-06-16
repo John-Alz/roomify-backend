@@ -1,9 +1,6 @@
 package com.roomify.roomifybackend.presentation.advice;
 
-import com.roomify.roomifybackend.services.exception.CheckInInvalidException;
-import com.roomify.roomifybackend.services.exception.CheckOutInvalidException;
-import com.roomify.roomifybackend.services.exception.NoAvailabilityException;
-import com.roomify.roomifybackend.services.exception.NoExistException;
+import com.roomify.roomifybackend.services.exception.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -32,6 +29,16 @@ public class ControllerAdvisor {
     @ExceptionHandler(NoAvailabilityException.class)
     public ResponseEntity<ExceptionResponse> handleAvailabilityException(NoAvailabilityException e) {
         return ResponseEntity.badRequest().body(new ExceptionResponse("No hay disponibilidad para el tipo de habitación en las fechas seleccionadas.", LocalDate.now()));
+    }
+
+    @ExceptionHandler(InvalidBookingStatus.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidBookingStatus(InvalidBookingStatus e) {
+        return ResponseEntity.badRequest().body(new ExceptionResponse("Solo se pueden asignar habitaciones a reservas confirmadas.", LocalDate.now()));
+    }
+
+    @ExceptionHandler(InvalidSizeRoomsIds.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidSizeRoomsIds(InvalidSizeRoomsIds e) {
+        return ResponseEntity.badRequest().body(new ExceptionResponse("Debes asignar el numero exacto de habitaciones.", LocalDate.now()));
     }
 
 }

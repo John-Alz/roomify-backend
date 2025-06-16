@@ -2,6 +2,7 @@ package com.roomify.roomifybackend.services.implementation;
 
 import com.roomify.roomifybackend.persistence.entity.*;
 import com.roomify.roomifybackend.persistence.repository.BookingRepository;
+import com.roomify.roomifybackend.persistence.repository.BookingRoomAssignmentRepository;
 import com.roomify.roomifybackend.persistence.repository.RoomTypeRepository;
 import com.roomify.roomifybackend.persistence.repository.UserRepository;
 import com.roomify.roomifybackend.presentation.dto.request.SaveBookingRequest;
@@ -36,6 +37,7 @@ public class BookingServiceImpl implements IBookingService {
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
     private final RoomTypeRepository roomTypeRepository;
+    private final BookingRoomAssignmentRepository bookingRoomAssignmentRepository;
     private final BookingMapper bookingMapper;
     private final RoomAvailabilityService roomAvailabilityService;
 
@@ -65,20 +67,11 @@ public class BookingServiceImpl implements IBookingService {
             throw new NoExistException("Tipo de habitacion no encontrado");
         }
 
-        //
-
-//        List<LocalDate> dates = DateRangeUtils.generateDates(saveBookingRequest.checkInDate(), saveBookingRequest.checkOutDate());
-//        for (LocalDate date : dates) {
-//            System.out.println(date.toString());
-//        }
-
         if (!roomAvailabilityService.existsAvailability(saveBookingRequest)) {
             throw new NoAvailabilityException();
         }
 
         roomAvailabilityService.updateReservationsByDate(saveBookingRequest);
-
-        //
 
         BookingValidator.verifyDates(saveBookingRequest.checkInDate(), saveBookingRequest.checkOutDate());
 
@@ -86,9 +79,7 @@ public class BookingServiceImpl implements IBookingService {
 
         Long daysBetween = ChronoUnit.DAYS.between(saveBookingRequest.checkInDate(), saveBookingRequest.checkOutDate());
 
-        System.out.println(daysBetween);
         BigDecimal totalBookingPrice = BookingHelper.calculateTotalPrice(booking.getNumberOfRoom(), roomTypeFound.getPrice(), daysBetween);
-
         booking.setTotalPrice(totalBookingPrice);
 
         bookingRepository.save(booking);
@@ -97,6 +88,7 @@ public class BookingServiceImpl implements IBookingService {
 
     @Override
     public PageResult<BookingResponse> getAllBookings(Integer page, Integer size) {
+
         Pageable paging = PageRequest.of(page, size);
         Page<BookingEntity> bookingPage = bookingRepository.findAll(paging);
         List<BookingResponse> bookingResponseList = bookingMapper.roomResponseList(bookingPage.getContent());
@@ -124,26 +116,28 @@ public class BookingServiceImpl implements IBookingService {
     @Override
     public BookingResponse updateBooking(Long bookingId, SaveBookingRequest saveBookingRequest) {
         BookingEntity bookingFound = bookingRepository.findById(bookingId).orElse(null);
+        RoomTypeEntity roomTypeFound = roomTypeRepository.findById(saveBookingRequest.roomTypeId()).orElse(null);
 
         if (bookingFound == null) {
             throw new NoExistException("Esa reserva no existe.");
         }
 
+        if (roomTypeFound == null) {
+            throw new NoExistException("Esa habitacion no existe.");
+        }
+
         BookingValidator.verifyDates(saveBookingRequest.checkInDate(), saveBookingRequest.checkOutDate());
-
-//        Set<RoomEntity> roomsFound = findRooms(saveBookingRequest);
-
+        System.out.println("USER  ID UDATE: " + bookingFound.getClientId().getId());
+        bookingFound.setRoomType(roomTypeFound);
         bookingFound.setStatus(saveBookingRequest.status());
         bookingFound.setCheckInDate(saveBookingRequest.checkInDate());
         bookingFound.setCheckOutDate(saveBookingRequest.checkOutDate());
-//        bookingFound.setRooms(roomsFound);
+        bookingFound.setNumberOfRoom(saveBookingRequest.numberOfRoom());
+
 
         Long daysBetween = ChronoUnit.DAYS.between(saveBookingRequest.checkInDate(), saveBookingRequest.checkOutDate());
-
-        System.out.println(daysBetween);
-
-//        BigDecimal totalPrice = BookingHelper.calculateTotalPrice(roomsFound, daysBetween);
-//        bookingFound.setTotalPrice(totalPrice);
+        BigDecimal totalBookingPrice = BookingHelper.calculateTotalPrice(bookingFound.getNumberOfRoom(), roomTypeFound.getPrice(), daysBetween);
+        bookingFound.setTotalPrice(totalBookingPrice);
 
         bookingRepository.save(bookingFound);
 

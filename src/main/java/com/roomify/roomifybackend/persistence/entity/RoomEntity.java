@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -19,28 +20,18 @@ public class RoomEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int room_rumber;
-    private String room_name;
+    private String room_number;
 
-    @Lob
-    @Column(columnDefinition = "TEXT")
-    private String room_description;
-    private int roomsCount;
-    private int bathRoomsCount;
-
-    @ElementCollection
-    @CollectionTable(name = "room_image", joinColumns = @JoinColumn(name = "room_id"))
-    @Column(name = "image_url")
-    private List<String> room_images;
-    private RoomStatus room_availability;
-    private int room_capacity;
-    private BigDecimal room_price;
-
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "room_type_id")
-    private RoomTypeEntity room_type;
+    private RoomTypeEntity roomType;
 
-    @ManyToMany(fetch = FetchType.EAGER, targetEntity = AmenityEntity.class)
-    @JoinTable(name = "habitacion_amenidad", joinColumns = @JoinColumn(name = "habitacion_id"), inverseJoinColumns = @JoinColumn(name = "amenidad_id"))
-    private Set<AmenityEntity> amenities;
+    private RoomStatus status;
+
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BookingRoomAssignment> bookingAssignments;
+
+    private LocalDate lastMaintenance;
+    private String notes;
+
 }

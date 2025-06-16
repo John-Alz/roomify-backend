@@ -26,6 +26,7 @@ public class RoomTypeMapper {
                 .amenities(saveRoomTypeRequest.amenities_id().stream()
                         .map(id -> new AmenityEntity(id,null, null, null))
                         .collect(Collectors.toSet()))
+                .tags(saveRoomTypeRequest.tags())
                 .build();
     }
 
@@ -41,7 +42,8 @@ public class RoomTypeMapper {
                 roomTypeEntity.getQuantity_available(),
                 roomTypeEntity.getCapacity(),
                 roomTypeEntity.getPrice(),
-                roomTypeEntity.getAmenities()
+                roomTypeEntity.getAmenities(),
+                roomTypeEntity.getTags()
         );
     }
 

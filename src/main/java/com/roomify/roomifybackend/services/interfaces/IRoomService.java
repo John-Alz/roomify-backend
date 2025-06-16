@@ -13,7 +13,7 @@ public interface IRoomService {
 
     SaveResponse saveRoom(SaveRoomRequest saveRoomRequest);
 
-    PageResult<RoomResponse> getAllRooms(Integer page, Integer size, boolean orderAsc, String roomType, Integer roomCapacity, LocalDate checkIn, LocalDate checkOut, BigDecimal minPrice, BigDecimal maxPrice, Long amenityId);
+    PageResult<RoomResponse> getAllRooms(Integer page, Integer size, boolean orderAsc);
 
     RoomResponse getRoomById(Long roomId);
 

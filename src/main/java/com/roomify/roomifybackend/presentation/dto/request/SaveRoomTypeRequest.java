@@ -14,5 +14,6 @@ public record SaveRoomTypeRequest(
         int quantity_available,
         int capacity,
         BigDecimal price,
-        Set<Long> amenities_id) {
+        Set<Long> amenities_id,
+        List<String> tags) {
 }

@@ -173,6 +173,7 @@ public class RoomifybackendApplication {
 					.capacity(2)
 					.price(new BigDecimal("55.999"))
 					.amenities(Set.of(wifi, piscina, gimnasio, servicioHabitacion))
+					.tags(List.of("Decoración moderna", "Popular"))
 					.build();
 
 			RoomTypeEntity room2 = RoomTypeEntity.builder()
@@ -186,6 +187,7 @@ public class RoomifybackendApplication {
 					.capacity(4)
 					.price(new BigDecimal("169.999"))
 					.amenities(Set.of( piscina, gimnasio))
+					.tags(List.of("Elección del mes", "¡Reserva ya!"))
 					.build();
 
 			RoomTypeEntity room3 = RoomTypeEntity.builder()
@@ -199,6 +201,7 @@ public class RoomifybackendApplication {
 					.capacity(8)
 					.price(new BigDecimal("345.999"))
 					.amenities(Set.of(wifi, piscina, gimnasio, estacionamiento, aireAcondicionado))
+					.tags(List.of("Recomendada", "Popular"))
 					.build();
 
 			RoomTypeEntity room4 = RoomTypeEntity.builder()
@@ -212,6 +215,7 @@ public class RoomifybackendApplication {
 					.capacity(4)
 					.price(new BigDecimal("155.999"))
 					.amenities(Set.of(wifi, piscina, gimnasio))
+					.tags(List.of("Hot sale", "Popular"))
 					.build();
 
 

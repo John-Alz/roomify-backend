@@ -31,15 +31,10 @@ public class RoomController {
     public ResponseEntity<PageResult<RoomResponse>> getRooms(
             @RequestParam Integer page,
             @RequestParam Integer size,
-            @RequestParam boolean orderAsc,
-            @RequestParam(required = false) String roomType,
-            @RequestParam(required = false) Integer roomCapacity,
-            @RequestParam(required = false) LocalDate checkIn,
-            @RequestParam(required = false) LocalDate checkOut,
-            @RequestParam(required = false) BigDecimal minPrice,
-            @RequestParam(required = false) BigDecimal maxPrice,
-            @RequestParam(required = false) Long amenityId){
-        PageResult<RoomResponse> rooms = roomService.getAllRooms(page, size, orderAsc, roomType, roomCapacity, checkIn, checkOut, minPrice, maxPrice, amenityId);
+            @RequestParam boolean orderAsc
+//            @RequestParam(required = false) String roomType
+            ){
+        PageResult<RoomResponse> rooms = roomService.getAllRooms(page, size, orderAsc);
         return ResponseEntity.ok(rooms);
     }
 

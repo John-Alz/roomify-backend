@@ -31,10 +31,6 @@ public class RoomAvailabilityService {
             assert roomType != null;
             int stock = roomType.getQuantity_available();
 
-            System.out.println("booking request num of rooms: " + bookingRequest.numberOfRoom());
-            System.out.println("Reservadas: " + booked);
-            System.out.println("Stock: " + stock);
-
             if (booked + bookingRequest.numberOfRoom() > stock) {
                 return false;
             }

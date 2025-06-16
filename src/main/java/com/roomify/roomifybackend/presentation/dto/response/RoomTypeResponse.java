@@ -17,5 +17,6 @@ public record RoomTypeResponse(
         int quantity_available,
         int capacity,
         BigDecimal price,
-        Set<AmenityEntity> amenities) {
+        Set<AmenityEntity> amenities,
+        List<String> tags) {
 }

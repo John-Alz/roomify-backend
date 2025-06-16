@@ -1,6 +1,5 @@
 package com.roomify.roomifybackend.services.interfaces;
 
-import com.roomify.roomifybackend.persistence.entity.AmenityEntity;
 import com.roomify.roomifybackend.persistence.entity.PageResult;
 import com.roomify.roomifybackend.presentation.dto.request.SaveAmenityRequest;
 import com.roomify.roomifybackend.presentation.dto.response.AmenityResponse;
