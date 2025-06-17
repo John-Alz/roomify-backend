@@ -1,15 +1,13 @@
 package com.roomify.roomifybackend.presentation.controller;
 
-import com.roomify.roomifybackend.presentation.dto.request.AssignRoomsRequest;
+import com.roomify.roomifybackend.presentation.dto.request.AssignmentRoomsRequest;
+import com.roomify.roomifybackend.presentation.dto.response.AssignmentRoomsResponse;
 import com.roomify.roomifybackend.presentation.dto.response.SaveResponse;
 import com.roomify.roomifybackend.services.interfaces.IBookingRoomAssignmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/room_assigment")
@@ -19,8 +17,13 @@ public class BookingRoomAssignmentController {
     private final IBookingRoomAssignmentService iBookingRoomAssignmentService;
 
     @PostMapping
-    public ResponseEntity<SaveResponse> saveBookingRoomAssignment(@RequestBody AssignRoomsRequest assignRoomsRequest) {
+    public ResponseEntity<SaveResponse> saveBookingRoomAssignment(@RequestBody AssignmentRoomsRequest assignRoomsRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(iBookingRoomAssignmentService.saveBookingRoomAssignment(assignRoomsRequest));
+    }
+
+    @GetMapping("/{bookingId}")
+    public ResponseEntity<AssignmentRoomsResponse> getBookingRoomAssignment(@PathVariable Long bookingId) {
+        return ResponseEntity.ok(iBookingRoomAssignmentService.getBookingRoomAssignmentByBookingId(bookingId));
     }
 
 }

@@ -10,5 +10,5 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-public record RoomResponse(Long id, String room_number, RoomTypeEntity room_type_id, RoomStatus status, LocalDate lastMaintenance, String notes) {
+public record RoomResponse(Long id, String room_number, RoomTypeEntity room_type, RoomStatus status, LocalDate lastMaintenance, String notes) {
 }

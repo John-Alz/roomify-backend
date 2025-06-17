@@ -47,11 +47,13 @@ public class RoomServiceImpl implements IRoomService {
     public PageResult<RoomResponse> getAllRooms(
             Integer page,
             Integer size,
-            boolean orderAsc) {
+            boolean orderAsc,
+            Long roomTypeId) {
 //        Sort sort = orderAsc ? Sort.by("room_name").ascending() : Sort.by("room_name").descending();
 
+        SearchRoomSpecification spec = new SearchRoomSpecification(roomTypeId);
         Pageable paging = PageRequest.of(page, size);
-        Page<RoomEntity> roomPage = roomRepository.findAll(paging);
+        Page<RoomEntity> roomPage = roomRepository.findAll(spec, paging);
         List<RoomResponse> roomsList = roomMapper.toResponseList(roomPage.getContent());
         return new PageResult<>(
                 roomsList,
@@ -85,12 +87,19 @@ public class RoomServiceImpl implements IRoomService {
     public RoomResponse updateRoom(Long roomId, SaveRoomRequest saveRoomRequest) {
 
         RoomEntity roomFound = roomRepository.findById(roomId).orElse(null);
+        RoomTypeEntity roomTypeFound = roomTypeRepository.findById(saveRoomRequest.room_type_id()).orElse(null);
 
         if (roomFound == null) {
             throw new NoExistException("Habitacion no encontrada");
         }
 
+        roomFound.setRoom_number(saveRoomRequest.room_number());
+        roomFound.setRoomType(roomTypeFound);
+        roomFound.setStatus(saveRoomRequest.status());
+        roomFound.setLastMaintenance(saveRoomRequest.lastMaintenance());
+        roomFound.setNotes(saveRoomRequest.notes());
 
+        roomRepository.save(roomFound);
         return roomMapper.toResponse(roomFound);
     }
 }

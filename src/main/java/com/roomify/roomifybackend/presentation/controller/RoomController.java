@@ -31,10 +31,10 @@ public class RoomController {
     public ResponseEntity<PageResult<RoomResponse>> getRooms(
             @RequestParam Integer page,
             @RequestParam Integer size,
-            @RequestParam boolean orderAsc
-//            @RequestParam(required = false) String roomType
+            @RequestParam boolean orderAsc,
+            @RequestParam(required = false) Long roomTypeId
             ){
-        PageResult<RoomResponse> rooms = roomService.getAllRooms(page, size, orderAsc);
+        PageResult<RoomResponse> rooms = roomService.getAllRooms(page, size, orderAsc, roomTypeId);
         return ResponseEntity.ok(rooms);
     }
 

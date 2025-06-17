@@ -4,8 +4,11 @@ import com.roomify.roomifybackend.persistence.entity.*;
 import com.roomify.roomifybackend.persistence.repository.BookingRepository;
 import com.roomify.roomifybackend.persistence.repository.BookingRoomAssignmentRepository;
 import com.roomify.roomifybackend.persistence.repository.RoomRepository;
-import com.roomify.roomifybackend.presentation.dto.request.AssignRoomsRequest;
+import com.roomify.roomifybackend.presentation.dto.request.AssignmentRoomsRequest;
+import com.roomify.roomifybackend.presentation.dto.response.AssignmentRoomsResponse;
+import com.roomify.roomifybackend.presentation.dto.response.RoomResponse;
 import com.roomify.roomifybackend.presentation.dto.response.SaveResponse;
+import com.roomify.roomifybackend.presentation.mappers.RoomMapper;
 import com.roomify.roomifybackend.services.exception.InvalidBookingStatus;
 import com.roomify.roomifybackend.services.exception.InvalidSizeRoomsIds;
 import com.roomify.roomifybackend.services.interfaces.IBookingRoomAssignmentService;
@@ -23,9 +26,10 @@ public class BookingRoomAssignmentService implements IBookingRoomAssignmentServi
     private final BookingRepository bookingRepository;
     private final RoomRepository roomRepository;
     private final BookingRoomAssignmentRepository bookingRoomAssignmentRepository;
+    private final RoomMapper roomMapper;
 
     @Override
-    public SaveResponse saveBookingRoomAssignment(AssignRoomsRequest assignRoomsRequest) {
+    public SaveResponse saveBookingRoomAssignment(AssignmentRoomsRequest assignRoomsRequest) {
         BookingEntity booking = bookingRepository.findById(assignRoomsRequest.bookingId()).orElse(null);
         assert booking != null;
         if (!booking.getStatus().equals(BookingStatus.CONFIRMADA)) {
@@ -57,4 +61,14 @@ public class BookingRoomAssignmentService implements IBookingRoomAssignmentServi
         return new SaveResponse("Se asignaron las habitaciones a la reserva", LocalDate.now());
     }
 
+    @Override
+    public AssignmentRoomsResponse getBookingRoomAssignmentByBookingId(Long bookingId) {
+        BookingEntity bookingFound = bookingRepository.findById(bookingId).orElse(null);
+        List<RoomEntity> assignedRooms = bookingFound.getRoomAssignments().stream()
+                .map(BookingRoomAssignment::getRoom)
+                .toList();
+        List<RoomResponse> roomResponses = roomMapper.toResponseList(assignedRooms);
+
+        return new AssignmentRoomsResponse(bookingId, roomResponses);
+    }
 }
