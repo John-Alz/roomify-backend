@@ -1,6 +1,7 @@
 package com.roomify.roomifybackend.services.interfaces;
 
 import com.roomify.roomifybackend.persistence.entity.PageResult;
+import com.roomify.roomifybackend.persistence.entity.RoomStatus;
 import com.roomify.roomifybackend.presentation.dto.request.SaveRoomRequest;
 import com.roomify.roomifybackend.presentation.dto.response.DeleteResponse;
 import com.roomify.roomifybackend.presentation.dto.response.RoomResponse;
@@ -13,7 +14,7 @@ public interface IRoomService {
 
     SaveResponse saveRoom(SaveRoomRequest saveRoomRequest);
 
-    PageResult<RoomResponse> getAllRooms(Integer page, Integer size, boolean orderAsc, Long roomTypeId);
+    PageResult<RoomResponse> getAllRooms(Integer page, Integer size, boolean orderAsc, Long roomTypeId, RoomStatus status);
 
     RoomResponse getRoomById(Long roomId);
 

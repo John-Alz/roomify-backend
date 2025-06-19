@@ -16,6 +16,7 @@ import java.util.List;
 public class SearchRoomSpecification implements Specification<RoomEntity> {
 
     private Long roomTypeId;
+    private RoomStatus status;
 
     @Override
     public Predicate toPredicate(Root<RoomEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
@@ -30,6 +31,11 @@ public class SearchRoomSpecification implements Specification<RoomEntity> {
             Join<RoomEntity, RoomTypeEntity> roomRoomTypeJoin = root.join("roomType");
             Predicate roomTypeNamePredicate = criteriaBuilder.equal(roomRoomTypeJoin.get("id"), roomTypeId);
             predicates.add(roomTypeNamePredicate);
+        }
+
+        if (status != null) {
+            Predicate statusRoomPredicade = criteriaBuilder.equal(root.get("status"), status);
+            predicates.add(statusRoomPredicade);
         }
 
 

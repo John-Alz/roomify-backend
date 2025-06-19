@@ -48,10 +48,11 @@ public class RoomServiceImpl implements IRoomService {
             Integer page,
             Integer size,
             boolean orderAsc,
-            Long roomTypeId) {
+            Long roomTypeId,
+            RoomStatus status) {
 //        Sort sort = orderAsc ? Sort.by("room_name").ascending() : Sort.by("room_name").descending();
 
-        SearchRoomSpecification spec = new SearchRoomSpecification(roomTypeId);
+        SearchRoomSpecification spec = new SearchRoomSpecification(roomTypeId, status);
         Pageable paging = PageRequest.of(page, size);
         Page<RoomEntity> roomPage = roomRepository.findAll(spec, paging);
         List<RoomResponse> roomsList = roomMapper.toResponseList(roomPage.getContent());

@@ -41,4 +41,11 @@ public class ControllerAdvisor {
         return ResponseEntity.badRequest().body(new ExceptionResponse("Debes asignar el numero exacto de habitaciones.", LocalDate.now()));
     }
 
+    @ExceptionHandler(RoomWithBookingActiveException.class)
+    public ResponseEntity<ExceptionResponse> handleRoomWithBookingActiveExceptions(RoomWithBookingActiveException e) {
+        return ResponseEntity.badRequest().body(new ExceptionResponse("La habitacion tiene reservas asociadas.", LocalDate.now()));
+    }
+
+    //
+
 }

@@ -2,6 +2,7 @@ package com.roomify.roomifybackend.services.implementation;
 
 import com.roomify.roomifybackend.persistence.entity.*;
 import com.roomify.roomifybackend.persistence.repository.BookingByDateRepository;
+import com.roomify.roomifybackend.persistence.repository.BookingRepository;
 import com.roomify.roomifybackend.persistence.repository.RoomTypeRepository;
 import com.roomify.roomifybackend.presentation.dto.request.SaveRoomTypeRequest;
 import com.roomify.roomifybackend.presentation.dto.response.DeleteResponse;
@@ -9,6 +10,7 @@ import com.roomify.roomifybackend.presentation.dto.response.RoomTypeResponse;
 import com.roomify.roomifybackend.presentation.dto.response.SaveResponse;
 import com.roomify.roomifybackend.presentation.mappers.RoomTypeMapper;
 import com.roomify.roomifybackend.services.exception.NoExistException;
+import com.roomify.roomifybackend.services.exception.RoomWithBookingActiveException;
 import com.roomify.roomifybackend.services.interfaces.IRoomTypeService;
 import com.roomify.roomifybackend.specification.SearchRoomTypeSpecification;
 import com.roomify.roomifybackend.utils.helpers.DateRangeUtils;
@@ -29,6 +31,7 @@ public class RoomTypeServiceImpl implements IRoomTypeService {
 
     private final RoomTypeRepository roomTypeRepository;
     private final BookingByDateRepository bookingByDateRepository;
+    private final BookingRepository bookingRepository;
     private final RoomTypeMapper roomTypeMapper;
 
     @Override
@@ -109,6 +112,16 @@ public class RoomTypeServiceImpl implements IRoomTypeService {
 
         if(roomTypeFound == null) {
             throw new NoExistException("Tipo de habitacion no encontrada");
+        }
+
+        boolean bookingFound = bookingRepository.existsActiveBookingsByRoomTypeId(
+                id,
+                List.of(BookingStatus.CONFIRMADA, BookingStatus.CHECK_IN)
+        );
+
+        if (bookingFound) {
+            System.out.println("El tipo de habitación tiene reservas activas");
+            throw new RoomWithBookingActiveException();
         }
         roomTypeRepository.deleteById(id);
         return new DeleteResponse("Tipo de habitacion eliminada", LocalDate.now());

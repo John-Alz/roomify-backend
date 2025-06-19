@@ -2,6 +2,7 @@ package com.roomify.roomifybackend.presentation.controller;
 
 
 import com.roomify.roomifybackend.persistence.entity.PageResult;
+import com.roomify.roomifybackend.persistence.entity.RoomStatus;
 import com.roomify.roomifybackend.presentation.dto.request.SaveRoomRequest;
 import com.roomify.roomifybackend.presentation.dto.response.DeleteResponse;
 import com.roomify.roomifybackend.presentation.dto.response.RoomResponse;
@@ -32,9 +33,10 @@ public class RoomController {
             @RequestParam Integer page,
             @RequestParam Integer size,
             @RequestParam boolean orderAsc,
-            @RequestParam(required = false) Long roomTypeId
+            @RequestParam(required = false) Long roomTypeId,
+            @RequestParam(required = false) RoomStatus status
             ){
-        PageResult<RoomResponse> rooms = roomService.getAllRooms(page, size, orderAsc, roomTypeId);
+        PageResult<RoomResponse> rooms = roomService.getAllRooms(page, size, orderAsc, roomTypeId, status);
         return ResponseEntity.ok(rooms);
     }
 
