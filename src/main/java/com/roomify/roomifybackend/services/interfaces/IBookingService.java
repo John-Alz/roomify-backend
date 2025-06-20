@@ -4,13 +4,14 @@ import com.roomify.roomifybackend.persistence.entity.PageResult;
 import com.roomify.roomifybackend.presentation.dto.request.SaveBookingRequest;
 import com.roomify.roomifybackend.presentation.dto.response.BookingResponse;
 import com.roomify.roomifybackend.presentation.dto.response.DeleteResponse;
+import com.roomify.roomifybackend.presentation.dto.response.SaveBookingResponse;
 import com.roomify.roomifybackend.presentation.dto.response.SaveResponse;
 
 import java.util.Optional;
 
 public interface IBookingService {
 
-    SaveResponse saveBooking(SaveBookingRequest saveBookingRequest);
+    SaveBookingResponse saveBooking(SaveBookingRequest saveBookingRequest);
 
     PageResult<BookingResponse> getAllBookings(Integer page, Integer size);
 
@@ -19,6 +20,8 @@ public interface IBookingService {
     BookingResponse updateBooking(Long bookingId, SaveBookingRequest saveBookingRequest);
 
     DeleteResponse deleteBooking(Long bookingId);
+
+    void updatePaymentStatus(Long bookingId, String mpStatus);
 
 
 }

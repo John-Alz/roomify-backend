@@ -4,6 +4,7 @@ import com.roomify.roomifybackend.persistence.entity.PageResult;
 import com.roomify.roomifybackend.presentation.dto.request.SaveBookingRequest;
 import com.roomify.roomifybackend.presentation.dto.response.BookingResponse;
 import com.roomify.roomifybackend.presentation.dto.response.DeleteResponse;
+import com.roomify.roomifybackend.presentation.dto.response.SaveBookingResponse;
 import com.roomify.roomifybackend.presentation.dto.response.SaveResponse;
 import com.roomify.roomifybackend.services.interfaces.IBookingService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class BookingController {
     private final IBookingService bookingService;
 
     @PostMapping
-    public ResponseEntity<SaveResponse> saveBooking(@RequestBody SaveBookingRequest saveBookingRequest) {
+    public ResponseEntity<SaveBookingResponse> saveBooking(@RequestBody SaveBookingRequest saveBookingRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(bookingService.saveBooking(saveBookingRequest));
     }
 

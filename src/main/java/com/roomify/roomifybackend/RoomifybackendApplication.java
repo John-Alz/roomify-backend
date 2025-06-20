@@ -219,7 +219,7 @@ public class RoomifybackendApplication {
 					.images(List.of("https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=600", "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=600", "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=600"))
 					.quantity_available(10)
 					.capacity(2)
-					.price(new BigDecimal("55.999"))
+					.price(new BigDecimal("55999"))
 					.amenities(Set.of(wifi, piscina, gimnasio, servicioHabitacion))
 					.tags(List.of("Decoración moderna", "Popular"))
 					.build();
@@ -233,7 +233,7 @@ public class RoomifybackendApplication {
 					.images(List.of("https://images.unsplash.com/photo-1568495248636-6432b97bd949?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=600", "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=600"))
 					.quantity_available(5)
 					.capacity(4)
-					.price(new BigDecimal("169.999"))
+					.price(new BigDecimal("169999"))
 					.amenities(Set.of( piscina, gimnasio))
 					.tags(List.of("Elección del mes", "¡Reserva ya!"))
 					.build();
@@ -247,7 +247,7 @@ public class RoomifybackendApplication {
 					.images(List.of("https://images.unsplash.com/photo-1549638441-b787d2e11f14?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=600", "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=600"))
 					.quantity_available(10)
 					.capacity(8)
-					.price(new BigDecimal("345.999"))
+					.price(new BigDecimal("345999"))
 					.amenities(Set.of(wifi, piscina, gimnasio, estacionamiento, aireAcondicionado))
 					.tags(List.of("Recomendada", "Popular"))
 					.build();
@@ -261,7 +261,7 @@ public class RoomifybackendApplication {
 					.images(List.of("https://images.unsplash.com/photo-1600077625345-f401f4ba2fde?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=600", "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=600"))
 					.quantity_available(10)
 					.capacity(4)
-					.price(new BigDecimal("155.999"))
+					.price(new BigDecimal("155999"))
 					.amenities(Set.of(wifi, piscina, gimnasio))
 					.tags(List.of("Hot sale", "Popular"))
 					.build();
@@ -282,7 +282,7 @@ public class RoomifybackendApplication {
 					.status(BookingStatus.CONFIRMADA)
 					.checkInDate(LocalDate.of(2025, 06, 20))
 					.checkOutDate(LocalDate.of(2025, 06, 24))
-					.totalPrice(BigDecimal.valueOf(467.992))
+					.totalPrice(BigDecimal.valueOf(467992))
 					.numberOfRoom(2)
 					.build();
 
@@ -297,7 +297,7 @@ public class RoomifybackendApplication {
 					.status(BookingStatus.CONFIRMADA)
 					.checkInDate(LocalDate.of(2025, 06, 18))
 					.checkOutDate(LocalDate.of(2025, 06, 22))
-					.totalPrice(BigDecimal.valueOf(243.996))
+					.totalPrice(BigDecimal.valueOf(243996))
 					.numberOfRoom(1)
 					.build();
 
@@ -312,7 +312,7 @@ public class RoomifybackendApplication {
 					.status(BookingStatus.CONFIRMADA)
 					.checkInDate(LocalDate.of(2025, 07, 05))
 					.checkOutDate(LocalDate.of(2025, 07, 07))
-					.totalPrice(BigDecimal.valueOf(355.994))
+					.totalPrice(BigDecimal.valueOf(355994))
 					.numberOfRoom(3)
 					.build();
 
@@ -327,7 +327,7 @@ public class RoomifybackendApplication {
 					.status(BookingStatus.CONFIRMADA)
 					.checkInDate(LocalDate.of(2025, 6, 25))
 					.checkOutDate(LocalDate.of(2025, 6, 28))
-					.totalPrice(BigDecimal.valueOf(1057.997))
+					.totalPrice(BigDecimal.valueOf(1057997))
 					.numberOfRoom(1)
 					.build();
 
@@ -342,7 +342,7 @@ public class RoomifybackendApplication {
 					.status(BookingStatus.CONFIRMADA)
 					.checkInDate(LocalDate.of(2025, 7, 10))
 					.checkOutDate(LocalDate.of(2025, 7, 13))
-					.totalPrice(BigDecimal.valueOf(955.997))
+					.totalPrice(BigDecimal.valueOf(955997))
 					.numberOfRoom(2)
 					.build();
 
@@ -357,7 +357,7 @@ public class RoomifybackendApplication {
 					.status(BookingStatus.CONFIRMADA)
 					.checkInDate(LocalDate.of(2025, 7, 2))
 					.checkOutDate(LocalDate.of(2025, 7, 6))
-					.totalPrice(BigDecimal.valueOf(643.996))
+					.totalPrice(BigDecimal.valueOf(643996))
 					.numberOfRoom(1)
 					.build();
 

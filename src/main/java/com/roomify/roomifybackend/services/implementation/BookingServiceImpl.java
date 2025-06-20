@@ -8,6 +8,7 @@ import com.roomify.roomifybackend.persistence.repository.UserRepository;
 import com.roomify.roomifybackend.presentation.dto.request.SaveBookingRequest;
 import com.roomify.roomifybackend.presentation.dto.response.BookingResponse;
 import com.roomify.roomifybackend.presentation.dto.response.DeleteResponse;
+import com.roomify.roomifybackend.presentation.dto.response.SaveBookingResponse;
 import com.roomify.roomifybackend.presentation.dto.response.SaveResponse;
 import com.roomify.roomifybackend.presentation.mappers.BookingMapper;
 import com.roomify.roomifybackend.services.exception.NoAvailabilityException;
@@ -42,7 +43,7 @@ public class BookingServiceImpl implements IBookingService {
     private final RoomAvailabilityService roomAvailabilityService;
 
     @Override
-    public SaveResponse saveBooking(SaveBookingRequest saveBookingRequest) {
+    public SaveBookingResponse saveBooking(SaveBookingRequest saveBookingRequest) {
 
         UserEntity userFound = null;
 
@@ -83,7 +84,7 @@ public class BookingServiceImpl implements IBookingService {
         booking.setTotalPrice(totalBookingPrice);
 
         bookingRepository.save(booking);
-        return new SaveResponse("Reserva creada", LocalDate.now());
+        return new SaveBookingResponse("Reserva creada", booking.getId(), LocalDate.now());
     }
 
     @Override
@@ -149,6 +150,24 @@ public class BookingServiceImpl implements IBookingService {
         bookingRepository.findById(bookingId).orElseThrow(() -> new NoExistException("No existe la reserva con este id."));
         bookingRepository.deleteById(bookingId);
         return new DeleteResponse("Reserva eleminada", LocalDate.now());
+    }
+
+    @Override
+    public void updatePaymentStatus(Long bookingId, String mpStatus) {
+        BookingEntity bookingFound = bookingRepository.findById(bookingId).orElse(null);
+
+        if (bookingFound == null) {
+            throw new NoExistException("Esa reserva no existe.");
+        }
+
+        switch (mpStatus) {
+            case "approved" -> bookingFound.setStatus(BookingStatus.PAGADA);
+            case "pending" -> bookingFound.setStatus(BookingStatus.PENDIENTE);
+            case "rejected" -> bookingFound.setStatus(BookingStatus.RECHAZADA);
+            default -> bookingFound.setStatus(BookingStatus.PENDIENTE);
+        }
+        System.out.println("STATUS DESPUES DEL PAGO: " + bookingFound.getStatus());
+        bookingRepository.save(bookingFound);
     }
 
 
