@@ -1,5 +1,6 @@
 package com.roomify.roomifybackend.services.implementation;
 
+import com.roomify.roomifybackend.persistence.entity.RoleEnum;
 import com.roomify.roomifybackend.presentation.dto.request.AuthLoginRequest;
 import com.roomify.roomifybackend.presentation.dto.request.AuthRegisterUserRequest;
 import com.roomify.roomifybackend.presentation.dto.response.AuthResponse;
@@ -7,6 +8,7 @@ import com.roomify.roomifybackend.persistence.entity.RoleEntity;
 import com.roomify.roomifybackend.persistence.entity.UserEntity;
 import com.roomify.roomifybackend.persistence.repository.RoleRepository;
 import com.roomify.roomifybackend.persistence.repository.UserRepository;
+import com.roomify.roomifybackend.services.exception.NoExistException;
 import com.roomify.roomifybackend.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -46,11 +49,12 @@ public class UserDetailServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("El usuario con este email no existe"));
 
-        List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
+//        List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
+        List<SimpleGrantedAuthority> authorityList = Collections.singletonList(new SimpleGrantedAuthority(userEntity.getRole().getRoleEnum().toString()));
 
-        userEntity.getRoles().forEach(role -> {
-            authorityList.add(new SimpleGrantedAuthority("ROLE_".concat(role.getRoleEnum().name())));
-        });
+//        userEntity.getRoles().forEach(role -> {
+//            authorityList.add(new SimpleGrantedAuthority("ROLE_".concat(role.getRoleEnum().name())));
+//        });
 
 //        userEntity.getRoles().stream()
 //                .flatMap(role -> role.getPermissionsList().stream())
@@ -100,12 +104,19 @@ public class UserDetailServiceImpl implements UserDetailsService {
         String phoneNumber = registerUserRequest.phoneNumber();
         LocalDate birthday = registerUserRequest.birthday();
         String password = registerUserRequest.password();
-        List<String> roleRequest = registerUserRequest.roleRequest().roles();
-        Set<RoleEntity> roleEntitySet = roleRepository.findRoleEntitiesByRoleEnumIn(roleRequest).stream().collect(Collectors.toSet());
+//        List<String> roleRequest = registerUserRequest.roleRequest().roles();
+//        Set<RoleEntity> roleEntitySet = roleRepository.findRoleEntitiesByRoleEnumIn(roleRequest).stream().collect(Collectors.toSet());
 
-        if(roleEntitySet.isEmpty()) {
-            throw new IllegalArgumentException("Invalid role");
+        RoleEnum role = registerUserRequest.roleRequest().role();
+
+        RoleEntity roleFound = roleRepository.findRoleEnum(role).orElse(null);
+
+        if(roleFound == null) {
+            throw new NoExistException("Role no existe");
         }
+//        if(roleEntitySet.isEmpty()) {
+//            throw new IllegalArgumentException("Invalid role");
+//        }
 
         UserEntity userEntity = UserEntity.builder()
                 .username(username)
@@ -114,7 +125,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
                 .phoneNumber(phoneNumber)
                 .birthday(birthday)
                 .password(passwordEncoder.encode(password))
-                .roles(roleEntitySet)
+                .role(roleFound)
                 .isEnabled(true)
                 .accountNoLocked(true)
                 .accountNoExpired(true)
@@ -124,10 +135,12 @@ public class UserDetailServiceImpl implements UserDetailsService {
         UserEntity userCreated = userRepository.save(userEntity);
 
         //Para crear token necesitamos una lista de los permisos que va a tener.
-        List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
-        userCreated.getRoles().forEach(role -> {
-            authorityList.add(new SimpleGrantedAuthority("ROLE_".concat(role.getRoleEnum().name())));
-        });
+//        List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
+//        userCreated.getRoles().forEach(role -> {
+//            authorityList.add(new SimpleGrantedAuthority("ROLE_".concat(role.getRoleEnum().name())));
+//        });
+
+        List<SimpleGrantedAuthority> authorityList = Collections.singletonList(new SimpleGrantedAuthority(userCreated.getRole().getRoleEnum().toString()));
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(userCreated.getEmail(), userCreated.getPassword(), authorityList);
         String accessToken = jwtUtils.createToken(authentication);

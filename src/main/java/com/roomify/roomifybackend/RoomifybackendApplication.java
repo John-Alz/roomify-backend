@@ -22,6 +22,7 @@ public class RoomifybackendApplication {
 
 	@Bean
 	CommandLineRunner init(
+			RoleRepository roleRepository,
 			UserRepository userRepository,
 			RoomRepository roomRepository,
 			AmenityRepository amenityRepository,
@@ -43,17 +44,17 @@ public class RoomifybackendApplication {
 
 			/*create roles*/
 			RoleEntity roleAdmin = RoleEntity.builder()
-					.roleEnum(RoleEnum.ADMIN)
-//					.permissionsList(Set.of(createPermission,readPermission,updatePermission,deletePermission))
+					.roleEnum(RoleEnum.ADMINISTRADOR)
 					.build();
 			RoleEntity roleReceptionist = RoleEntity.builder()
-					.roleEnum(RoleEnum.RECEPTIONIST)
-//					.permissionsList(Set.of(createPermission,readPermission,updatePermission))
+					.roleEnum(RoleEnum.RECEPCIONISTA)
 					.build();
 			RoleEntity roleCustomer= RoleEntity.builder()
-					.roleEnum(RoleEnum.CUSTOMER)
-//					.permissionsList(Set.of(readPermission))
+					.roleEnum(RoleEnum.CLIENTE)
 					.build();
+
+			roleRepository.saveAll(List.of(roleAdmin, roleReceptionist, roleCustomer));
+
 			/*create users*/
 			UserEntity userJohn = UserEntity.builder()
 					.username("John")
@@ -66,7 +67,7 @@ public class RoomifybackendApplication {
 					.accountNoExpired(true)
 					.accountNoLocked(true)
 					.credentialNoExpired(true)
-					.roles(Set.of(roleAdmin))
+					.role(roleAdmin)
 					.build();
 			UserEntity userAngel = UserEntity.builder()
 					.username("Angel")
@@ -79,7 +80,7 @@ public class RoomifybackendApplication {
 					.accountNoExpired(true)
 					.accountNoLocked(true)
 					.credentialNoExpired(true)
-					.roles(Set.of(roleReceptionist))
+					.role(roleReceptionist)
 					.build();
 			UserEntity userPedro = UserEntity.builder()
 					.username("Pedro")
@@ -92,7 +93,7 @@ public class RoomifybackendApplication {
 					.accountNoExpired(true)
 					.accountNoLocked(true)
 					.credentialNoExpired(true)
-					.roles(Set.of(roleCustomer))
+					.role(roleCustomer)
 					.build();
 
 			UserEntity userMaria = UserEntity.builder()
@@ -106,7 +107,7 @@ public class RoomifybackendApplication {
 					.accountNoExpired(true)
 					.accountNoLocked(true)
 					.credentialNoExpired(true)
-					.roles(Set.of(roleCustomer))
+					.role(roleCustomer)
 					.build();
 
 			UserEntity userCarlos = UserEntity.builder()
@@ -120,7 +121,7 @@ public class RoomifybackendApplication {
 					.accountNoExpired(true)
 					.accountNoLocked(true)
 					.credentialNoExpired(true)
-					.roles(Set.of(roleCustomer))
+					.role(roleCustomer)
 					.build();
 
 			UserEntity userLaura = UserEntity.builder()
@@ -134,7 +135,7 @@ public class RoomifybackendApplication {
 					.accountNoExpired(true)
 					.accountNoLocked(true)
 					.credentialNoExpired(true)
-					.roles(Set.of(roleCustomer))
+					.role(roleCustomer)
 					.build();
 
 			UserEntity userAndres = UserEntity.builder()
@@ -148,7 +149,7 @@ public class RoomifybackendApplication {
 					.accountNoExpired(true)
 					.accountNoLocked(true)
 					.credentialNoExpired(true)
-					.roles(Set.of(roleCustomer))
+					.role(roleCustomer)
 					.build();
 
 			UserEntity userCamila = UserEntity.builder()
@@ -162,7 +163,7 @@ public class RoomifybackendApplication {
 					.accountNoExpired(true)
 					.accountNoLocked(true)
 					.credentialNoExpired(true)
-					.roles(Set.of(roleCustomer))
+					.role(roleCustomer)
 					.build();
 
 

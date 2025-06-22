@@ -1,8 +1,12 @@
 package com.roomify.roomifybackend.presentation.mappers;
 
+import com.roomify.roomifybackend.persistence.entity.AmenityEntity;
 import com.roomify.roomifybackend.persistence.entity.UserEntity;
 import com.roomify.roomifybackend.presentation.dto.response.UserResponse;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class UserMapper {
@@ -11,8 +15,17 @@ public class UserMapper {
         return new UserResponse(
                 user.getId(),
                 user.getUsername(),
-                user.getEmail()
+                user.getLastName(),
+                user.getPhoneNumber(),
+                user.getEmail(),
+                user.getRole()
         );
+    }
+
+    public List<UserResponse> toResponseList(List<UserEntity> amenities) {
+        return amenities.stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
     }
 
 }

@@ -127,7 +127,7 @@ public class BookingServiceImpl implements IBookingService {
             throw new NoExistException("Esa habitacion no existe.");
         }
 
-        BookingValidator.verifyDates(saveBookingRequest.checkInDate(), saveBookingRequest.checkOutDate());
+//        BookingValidator.verifyDates(saveBookingRequest.checkInDate(), saveBookingRequest.checkOutDate());
         System.out.println("USER  ID UDATE: " + bookingFound.getClientId().getId());
         bookingFound.setRoomType(roomTypeFound);
         bookingFound.setStatus(saveBookingRequest.status());

@@ -14,4 +14,7 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Long> {
     @Query("SELECT CASE WHEN COUNT(b) > 0 THEN true ELSE false END FROM BookingEntity b WHERE b.roomType.id = :roomTypeId AND b.status IN (:statuses)")
     boolean existsActiveBookingsByRoomTypeId(@Param("roomTypeId") Long roomTypeId, @Param("statuses") List<BookingStatus> statuses);
 
+    @Query("SELECT CASE WHEN COUNT(b) > 0 THEN true ELSE false END FROM BookingEntity b WHERE b.clientId.id = :userId ")
+    boolean existsActiveBookingsByUserId(@Param("userId") Long id);
+
 }

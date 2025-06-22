@@ -1,4 +1,8 @@
 package com.roomify.roomifybackend.presentation.dto.response;
 
-public record UserResponse(Long id, String name, String email) {
+import com.roomify.roomifybackend.persistence.entity.RoleEntity;
+
+import java.util.Set;
+
+public record UserResponse(Long id, String name, String lastName, String phoneNumber, String email, RoleEntity role) {
 }

@@ -48,7 +48,7 @@ public class BookingMapper {
         if(booking.getClientId() != null) {
             user = userMapper.toResponse(booking.getClientId());
         } else {
-            user = new UserResponse(null, null, null);
+            user = new UserResponse(null, null, null, null, null, null);
         }
         return new BookingResponse(
                 booking.getId(),
