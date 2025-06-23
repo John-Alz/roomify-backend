@@ -14,6 +14,7 @@ import com.roomify.roomifybackend.presentation.mappers.CancellationMapper;
 import com.roomify.roomifybackend.presentation.mappers.UserMapper;
 import com.roomify.roomifybackend.services.exception.NoExistException;
 import com.roomify.roomifybackend.services.interfaces.ICancellationService;
+import com.roomify.roomifybackend.specification.SearchCancellationSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -52,9 +53,17 @@ public class CancellationServiceImpl implements ICancellationService {
     }
 
     @Override
-    public PageResult<CancellationResponse> getAllCancellations(Integer page, Integer size, boolean orderAsc) {
+    public PageResult<CancellationResponse> getAllCancellations(Integer page, Integer size, boolean orderAsc, FiltersCancellations filtersCancellations) {
         Pageable paging = PageRequest.of(page, size);
-        Page<CancellationEntity> cancellationsPage = cancellationRepository.findAll(paging);
+        System.out.println(filtersCancellations.numberBooking());
+        SearchCancellationSpecification spec = new SearchCancellationSpecification(
+                filtersCancellations.numberBooking(),
+                filtersCancellations.dateFromCancellation(),
+                filtersCancellations.dateToCancellation(),
+                filtersCancellations.priceMin(),
+                filtersCancellations.roomTypeId()
+        );
+        Page<CancellationEntity> cancellationsPage = cancellationRepository.findAll(spec, paging);
         List<CancellationResponse> cancellationsList = cancellationsPage.getContent().stream()
                 .map(cancellation -> {
                     BookingResponse bookingResponse = bookingMapper.toResponse(cancellation.getBooking());

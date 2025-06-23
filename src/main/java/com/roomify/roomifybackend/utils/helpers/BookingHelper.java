@@ -3,10 +3,11 @@ package com.roomify.roomifybackend.utils.helpers;
 import com.roomify.roomifybackend.persistence.entity.RoomEntity;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
-import java.util.Set;
+import java.util.UUID;
 
 public class BookingHelper {
 
@@ -16,10 +17,10 @@ public class BookingHelper {
         return priceRoom.multiply(BigDecimal.valueOf(numberOfRooms)).multiply(BigDecimal.valueOf(daysBetween)).add(BigDecimal.valueOf(20000).setScale(0));
     }
 
-    public static String formatCOP(BigDecimal price) {
-        Locale colombia = new Locale("es", "CO");
-        NumberFormat formatCOP = NumberFormat.getCurrencyInstance(colombia);
-        return formatCOP.format(price);
+    public static String generateUniqueReservationNumber() {
+//        String datePart = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String randomPart = UUID.randomUUID().toString().substring(0, 5).toUpperCase();
+        return "RES-" + randomPart;
     }
 
 }

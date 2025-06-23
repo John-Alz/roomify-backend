@@ -12,6 +12,7 @@ import java.util.Set;
 
 public record BookingResponse(
         Long id,
+        String bookingNumber,
         UserResponse client,
         String name,
         String lastName,

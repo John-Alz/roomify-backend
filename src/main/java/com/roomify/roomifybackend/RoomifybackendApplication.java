@@ -274,6 +274,7 @@ public class RoomifybackendApplication {
 
 			BookingEntity booking1 = BookingEntity.builder()
 					.clientId(userPedro)
+					.reservationNumber("RES-KCJ8A")
 					.name(userPedro.getUsername())
 					.lastName(userPedro.getLastName())
 					.email(userPedro.getEmail())
@@ -289,6 +290,7 @@ public class RoomifybackendApplication {
 
 			BookingEntity booking2 = BookingEntity.builder()
 					.clientId(userMaria)
+					.reservationNumber("RES-M4TXP")
 					.name(userMaria.getUsername())
 					.lastName(userMaria.getLastName())
 					.email(userMaria.getEmail())
@@ -304,6 +306,7 @@ public class RoomifybackendApplication {
 
 			BookingEntity booking3 = BookingEntity.builder()
 					.clientId(userCarlos)
+					.reservationNumber("RES-WQ7L9")
 					.name(userCarlos.getUsername())
 					.lastName(userCarlos.getLastName())
 					.email(userCarlos.getEmail())
@@ -319,6 +322,7 @@ public class RoomifybackendApplication {
 
 			BookingEntity booking4 = BookingEntity.builder()
 					.clientId(userLaura)
+					.reservationNumber("RES-A56XA")
 					.name(userLaura.getUsername())
 					.lastName(userLaura.getLastName())
 					.email(userLaura.getEmail())
@@ -334,6 +338,7 @@ public class RoomifybackendApplication {
 
 			BookingEntity booking5 = BookingEntity.builder()
 					.clientId(userAndres)
+					.reservationNumber("RES-A56XA")
 					.name(userAndres.getUsername())
 					.lastName(userAndres.getLastName())
 					.email(userAndres.getEmail())
@@ -349,6 +354,7 @@ public class RoomifybackendApplication {
 
 			BookingEntity booking6 = BookingEntity.builder()
 					.clientId(userCamila)
+					.reservationNumber("RES-8ZKJ3")
 					.name(userCamila.getUsername())
 					.lastName(userCamila.getLastName())
 					.email(userCamila.getEmail())

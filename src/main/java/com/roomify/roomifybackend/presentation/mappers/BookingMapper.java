@@ -52,6 +52,7 @@ public class BookingMapper {
         }
         return new BookingResponse(
                 booking.getId(),
+                booking.getReservationNumber(),
                 user,
                 booking.getName(),
                 booking.getLastName(),

@@ -1,5 +1,6 @@
 package com.roomify.roomifybackend.presentation.controller;
 
+import com.roomify.roomifybackend.persistence.entity.FiltersCancellations;
 import com.roomify.roomifybackend.persistence.entity.PageResult;
 import com.roomify.roomifybackend.presentation.dto.request.SaveCancellationRequest;
 import com.roomify.roomifybackend.presentation.dto.response.CancellationResponse;
@@ -25,8 +26,8 @@ public class CancellationController {
     }
 
     @GetMapping
-    public ResponseEntity<PageResult<CancellationResponse>> getCancellations(Integer page, Integer size, boolean ordserAsc) {
-        PageResult<CancellationResponse> cancellationResponsePageResult = cancellationService.getAllCancellations(page, size, ordserAsc);
+    public ResponseEntity<PageResult<CancellationResponse>> getCancellations(Integer page, Integer size, boolean ordserAsc, @ModelAttribute FiltersCancellations filtersCancellations) {
+        PageResult<CancellationResponse> cancellationResponsePageResult = cancellationService.getAllCancellations(page, size, ordserAsc, filtersCancellations);
         return ResponseEntity.ok(cancellationResponsePageResult);
     }
 

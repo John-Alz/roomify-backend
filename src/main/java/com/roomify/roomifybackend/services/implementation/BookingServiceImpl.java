@@ -82,7 +82,8 @@ public class BookingServiceImpl implements IBookingService {
 
         BigDecimal totalBookingPrice = BookingHelper.calculateTotalPrice(booking.getNumberOfRoom(), roomTypeFound.getPrice(), daysBetween);
         booking.setTotalPrice(totalBookingPrice);
-
+        String numberBooking = BookingHelper.generateUniqueReservationNumber();
+        booking.setReservationNumber(numberBooking);
         bookingRepository.save(booking);
         return new SaveBookingResponse("Reserva creada", booking.getId(), LocalDate.now());
     }
