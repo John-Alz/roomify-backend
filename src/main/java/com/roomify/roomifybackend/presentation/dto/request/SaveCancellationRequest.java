@@ -1,9 +1,9 @@
 package com.roomify.roomifybackend.presentation.dto.request;
 
-import java.time.LocalDate;
 
 public record SaveCancellationRequest(
         Long bookingId,
+        Long userId,
         String reasonForCancellation
 ) {
 }

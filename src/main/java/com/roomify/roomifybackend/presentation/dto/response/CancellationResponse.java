@@ -6,6 +6,7 @@ public record CancellationResponse(
         Long id,
         BookingResponse boooking,
         LocalDate dateOfCancellation,
-        String reasonForCancellation
+        String reasonForCancellation,
+        UserResponse user
 ) {
 }

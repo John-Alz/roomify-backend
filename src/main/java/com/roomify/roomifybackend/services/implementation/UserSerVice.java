@@ -91,7 +91,10 @@ public class UserSerVice implements IUserService {
         userFound.setLastName(registerUserRequest.lastName());
         userFound.setPhoneNumber(registerUserRequest.phoneNumber());
         userFound.setEmail(registerUserRequest.email());
-        userFound.setPassword(passwordEncoder.encode(registerUserRequest.password()));
+        if (registerUserRequest.password() != null && !registerUserRequest.password().isEmpty()) {
+            userFound.setPassword(passwordEncoder.encode(registerUserRequest.password()));
+        }
+
         userFound.setRole(roleFound);
 
         userRepository.save(userFound);

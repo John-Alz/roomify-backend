@@ -11,5 +11,7 @@ public interface ICancellationService {
 
     PageResult<CancellationResponse> getAllCancellations(Integer page, Integer size, boolean orderAsc);
 
+    CancellationResponse getCancellation(Long cancellationId);
+
 }
 

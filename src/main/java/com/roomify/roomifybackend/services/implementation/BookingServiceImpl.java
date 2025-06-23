@@ -89,7 +89,6 @@ public class BookingServiceImpl implements IBookingService {
 
     @Override
     public PageResult<BookingResponse> getAllBookings(Integer page, Integer size) {
-
         Pageable paging = PageRequest.of(page, size);
         Page<BookingEntity> bookingPage = bookingRepository.findAll(paging);
         List<BookingResponse> bookingResponseList = bookingMapper.roomResponseList(bookingPage.getContent());
@@ -130,7 +129,9 @@ public class BookingServiceImpl implements IBookingService {
 //        BookingValidator.verifyDates(saveBookingRequest.checkInDate(), saveBookingRequest.checkOutDate());
         System.out.println("USER  ID UDATE: " + bookingFound.getClientId().getId());
         bookingFound.setRoomType(roomTypeFound);
-        bookingFound.setStatus(saveBookingRequest.status());
+        if (saveBookingRequest.status() != null && !saveBookingRequest.status().toString().isEmpty()) {
+            bookingFound.setStatus(saveBookingRequest.status());
+        }
         bookingFound.setCheckInDate(saveBookingRequest.checkInDate());
         bookingFound.setCheckOutDate(saveBookingRequest.checkOutDate());
         bookingFound.setNumberOfRoom(saveBookingRequest.numberOfRoom());

@@ -8,14 +8,21 @@ import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.preference.Preference;
 import com.roomify.roomifybackend.persistence.entity.BookingEntity;
+import com.roomify.roomifybackend.persistence.entity.PageResult;
 import com.roomify.roomifybackend.persistence.entity.PaymentEntity;
+import com.roomify.roomifybackend.persistence.entity.PaymentStatus;
 import com.roomify.roomifybackend.persistence.repository.BookingRepository;
 import com.roomify.roomifybackend.persistence.repository.PaymentRepository;
 import com.roomify.roomifybackend.presentation.dto.request.SavePaymentRequest;
+import com.roomify.roomifybackend.presentation.dto.response.PaymentResponse;
 import com.roomify.roomifybackend.presentation.dto.response.SaveResponse;
+import com.roomify.roomifybackend.presentation.mappers.PaymentMapper;
 import com.roomify.roomifybackend.services.exception.NoExistException;
 import com.roomify.roomifybackend.services.interfaces.IPaymentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -31,6 +38,7 @@ public class PaymentService implements IPaymentService {
 
     private final PaymentRepository paymentRepository;
     private final BookingRepository bookingRepository;
+    private final PaymentMapper paymentMapper;
 
     @Override
     public SaveResponse savePayment(SavePaymentRequest paymentRequest) throws MPException, MPApiException {
@@ -68,7 +76,7 @@ public class PaymentService implements IPaymentService {
             PaymentEntity paymentEntity = PaymentEntity.builder()
                     .booking(bookingFound)
                     .preference_id(preference.getId())
-                    .status("PEDIENTE")
+                    .status(PaymentStatus.PENDING)
                     .amount(bookingFound.getTotalPrice())
                     .created_at(LocalDateTime.now())
                     .build();
@@ -81,5 +89,19 @@ public class PaymentService implements IPaymentService {
 
             throw new RuntimeException("Error al crear preferencia de pago con Mercado Pago");
         }
+    }
+
+    @Override
+    public PageResult<PaymentResponse> getPayments(Integer page, Integer size, boolean orderAsc) {
+        Pageable paging = PageRequest.of(page, size);
+        Page<PaymentEntity> paymentPage = paymentRepository.findAll(paging);
+        List<PaymentResponse> paymentResponseList = paymentMapper.toListResponse(paymentPage.getContent());
+        return new PageResult<>(
+                paymentResponseList,
+                paymentPage.getNumber(),
+                paymentPage.getSize(),
+                paymentPage.getTotalPages(),
+                paymentPage.getTotalElements()
+        );
     }
 }

@@ -27,4 +27,8 @@ public class CancellationEntity {
 
     private String reasonForCancellation;
 
+    @ManyToOne
+    @JoinColumn(name = "cancelled_by_user_id")
+    private UserEntity cancelledBy;
+
 }

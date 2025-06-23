@@ -30,4 +30,10 @@ public class CancellationController {
         return ResponseEntity.ok(cancellationResponsePageResult);
     }
 
+    @GetMapping("/{cancellationId}")
+    public ResponseEntity<CancellationResponse> getCancelation(@PathVariable Long cancellationId) {
+        CancellationResponse cancellationResponse = cancellationService.getCancellation(cancellationId);
+        return ResponseEntity.ok(cancellationResponse);
+    }
+
 }

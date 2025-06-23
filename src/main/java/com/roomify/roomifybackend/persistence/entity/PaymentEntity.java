@@ -26,7 +26,7 @@ public class PaymentEntity {
 
     private String preference_id;
 
-    private String status;
+    private PaymentStatus status;
 
     private BigDecimal amount;
 

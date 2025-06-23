@@ -18,12 +18,13 @@ public class UserMapper {
                 user.getLastName(),
                 user.getPhoneNumber(),
                 user.getEmail(),
+                user.getBirthday(),
                 user.getRole()
         );
     }
 
-    public List<UserResponse> toResponseList(List<UserEntity> amenities) {
-        return amenities.stream()
+    public List<UserResponse> toResponseList(List<UserEntity> users) {
+        return users.stream()
                 .map(this::toResponse)
                 .collect(Collectors.toList());
     }
