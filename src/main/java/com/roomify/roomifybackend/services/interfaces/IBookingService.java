@@ -1,5 +1,6 @@
 package com.roomify.roomifybackend.services.interfaces;
 
+import com.roomify.roomifybackend.persistence.entity.FiltersBooking;
 import com.roomify.roomifybackend.persistence.entity.PageResult;
 import com.roomify.roomifybackend.presentation.dto.request.SaveBookingRequest;
 import com.roomify.roomifybackend.presentation.dto.response.BookingResponse;
@@ -13,7 +14,7 @@ public interface IBookingService {
 
     SaveBookingResponse saveBooking(SaveBookingRequest saveBookingRequest);
 
-    PageResult<BookingResponse> getAllBookings(Integer page, Integer size);
+    PageResult<BookingResponse> getAllBookings(Integer page, Integer size, FiltersBooking filtersBooking);
 
     BookingResponse getBooking(Long bookingId);
 

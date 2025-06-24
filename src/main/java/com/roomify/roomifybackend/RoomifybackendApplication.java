@@ -166,8 +166,22 @@ public class RoomifybackendApplication {
 					.role(roleCustomer)
 					.build();
 
+			UserEntity userEmily = UserEntity.builder()
+					.username("Emily")
+					.lastName("Padilla")
+					.email("emaily@gmail.com")
+					.phoneNumber("31385463324")
+					.birthday(LocalDate.of(2005, 9, 24))
+					.password("$2a$10$ijSt4zfkR7Gth3hY8huOl.eO.LARyYhiAfRpwtC5pWFord.65oOCa")
+					.isEnabled(true)
+					.accountNoExpired(true)
+					.accountNoLocked(true)
+					.credentialNoExpired(true)
+					.role(roleCustomer)
+					.build();
 
-			userRepository.saveAll(List.of(userJohn, userAngel, userPedro, userMaria, userCarlos, userLaura, userAndres, userCamila));
+
+			userRepository.saveAll(List.of(userJohn, userAngel, userPedro, userMaria, userCarlos, userLaura, userAndres, userCamila, userEmily));
 
 			// Amenidades
 			AmenityEntity wifi = AmenityEntity.builder()
@@ -322,7 +336,7 @@ public class RoomifybackendApplication {
 
 			BookingEntity booking4 = BookingEntity.builder()
 					.clientId(userLaura)
-					.reservationNumber("RES-A56XA")
+					.reservationNumber("RES-Y1BQM")
 					.name(userLaura.getUsername())
 					.lastName(userLaura.getLastName())
 					.email(userLaura.getEmail())

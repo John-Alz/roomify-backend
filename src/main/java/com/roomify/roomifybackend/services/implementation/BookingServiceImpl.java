@@ -14,6 +14,7 @@ import com.roomify.roomifybackend.presentation.mappers.BookingMapper;
 import com.roomify.roomifybackend.services.exception.NoAvailabilityException;
 import com.roomify.roomifybackend.services.exception.NoExistException;
 import com.roomify.roomifybackend.services.interfaces.IBookingService;
+import com.roomify.roomifybackend.specification.SearchBookingSpecificaction;
 import com.roomify.roomifybackend.utils.helpers.DateRangeUtils;
 import com.roomify.roomifybackend.utils.helpers.BookingHelper;
 import com.roomify.roomifybackend.utils.validator.BookingValidator;
@@ -89,9 +90,17 @@ public class BookingServiceImpl implements IBookingService {
     }
 
     @Override
-    public PageResult<BookingResponse> getAllBookings(Integer page, Integer size) {
+    public PageResult<BookingResponse> getAllBookings(Integer page, Integer size, FiltersBooking filtersBooking) {
         Pageable paging = PageRequest.of(page, size);
-        Page<BookingEntity> bookingPage = bookingRepository.findAll(paging);
+        SearchBookingSpecificaction spec = new SearchBookingSpecificaction(
+                filtersBooking.numberBooking(),
+                filtersBooking.checkInDate(),
+                filtersBooking.checkOutDate(),
+                filtersBooking.priceMin(),
+                filtersBooking.roomTypeId(),
+                filtersBooking.status()
+                );
+        Page<BookingEntity> bookingPage = bookingRepository.findAll(spec, paging);
         List<BookingResponse> bookingResponseList = bookingMapper.roomResponseList(bookingPage.getContent());
         return new PageResult<>(
                 bookingResponseList,

@@ -1,5 +1,6 @@
 package com.roomify.roomifybackend.presentation.controller;
 
+import com.roomify.roomifybackend.persistence.entity.FiltersBooking;
 import com.roomify.roomifybackend.persistence.entity.PageResult;
 import com.roomify.roomifybackend.presentation.dto.request.SaveBookingRequest;
 import com.roomify.roomifybackend.presentation.dto.response.BookingResponse;
@@ -25,8 +26,8 @@ public class BookingController {
     }
 
     @GetMapping
-    public ResponseEntity<PageResult<BookingResponse>> getBooking(Integer page, Integer size) {
-        PageResult<BookingResponse> bookings = bookingService.getAllBookings(page, size);
+    public ResponseEntity<PageResult<BookingResponse>> getBooking(Integer page, Integer size, @ModelAttribute FiltersBooking filtersBooking) {
+        PageResult<BookingResponse> bookings = bookingService.getAllBookings(page, size, filtersBooking);
         return ResponseEntity.ok(bookings);
     }
 
