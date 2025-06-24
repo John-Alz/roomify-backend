@@ -14,7 +14,7 @@ public interface IBookingService {
 
     SaveBookingResponse saveBooking(SaveBookingRequest saveBookingRequest);
 
-    PageResult<BookingResponse> getAllBookings(Integer page, Integer size, FiltersBooking filtersBooking);
+    PageResult<BookingResponse> getAllBookings(Integer page, Integer size, boolean orderAsc, FiltersBooking filtersBooking);
 
     BookingResponse getBooking(Long bookingId);
 

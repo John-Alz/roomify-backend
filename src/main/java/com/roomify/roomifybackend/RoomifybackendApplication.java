@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @SpringBootApplication
 public class RoomifybackendApplication {
@@ -27,7 +28,9 @@ public class RoomifybackendApplication {
 			RoomRepository roomRepository,
 			AmenityRepository amenityRepository,
 			RoomTypeRepository roomTypeRepository,
-			BookingRepository bookingRepository) {
+			BookingRepository bookingRepository,
+			PaymentRepository paymentRepository
+	) {
 		return args -> {
 //			PermissionEntity createPermission = PermissionEntity.builder()
 //					.name("CREATE")
@@ -286,6 +289,8 @@ public class RoomifybackendApplication {
 
 			// RESERVAS.
 
+
+
 			BookingEntity booking1 = BookingEntity.builder()
 					.clientId(userPedro)
 					.reservationNumber("RES-KCJ8A")
@@ -295,7 +300,7 @@ public class RoomifybackendApplication {
 					.phoneNumber(userPedro.getPhoneNumber())
 					.roomType(roomType1)
 					.bookingDate(LocalDateTime.now())
-					.status(BookingStatus.CONFIRMADA)
+					.status(BookingStatus.PAGADA)
 					.checkInDate(LocalDate.of(2025, 06, 20))
 					.checkOutDate(LocalDate.of(2025, 06, 24))
 					.totalPrice(BigDecimal.valueOf(467992))
@@ -311,7 +316,7 @@ public class RoomifybackendApplication {
 					.phoneNumber(userMaria.getPhoneNumber())
 					.roomType(roomType2)
 					.bookingDate(LocalDateTime.now())
-					.status(BookingStatus.CONFIRMADA)
+					.status(BookingStatus.PAGADA)
 					.checkInDate(LocalDate.of(2025, 06, 18))
 					.checkOutDate(LocalDate.of(2025, 06, 22))
 					.totalPrice(BigDecimal.valueOf(243996))
@@ -327,7 +332,7 @@ public class RoomifybackendApplication {
 					.phoneNumber(userCarlos.getPhoneNumber())
 					.roomType(roomType1)
 					.bookingDate(LocalDateTime.now())
-					.status(BookingStatus.CONFIRMADA)
+					.status(BookingStatus.PAGADA)
 					.checkInDate(LocalDate.of(2025, 07, 05))
 					.checkOutDate(LocalDate.of(2025, 07, 07))
 					.totalPrice(BigDecimal.valueOf(355994))
@@ -343,7 +348,7 @@ public class RoomifybackendApplication {
 					.phoneNumber(userLaura.getPhoneNumber())
 					.roomType(roomType3)
 					.bookingDate(LocalDateTime.now())
-					.status(BookingStatus.CONFIRMADA)
+					.status(BookingStatus.PAGADA)
 					.checkInDate(LocalDate.of(2025, 6, 25))
 					.checkOutDate(LocalDate.of(2025, 6, 28))
 					.totalPrice(BigDecimal.valueOf(1057997))
@@ -359,7 +364,7 @@ public class RoomifybackendApplication {
 					.phoneNumber(userAndres.getPhoneNumber())
 					.roomType(roomType4)
 					.bookingDate(LocalDateTime.now())
-					.status(BookingStatus.CONFIRMADA)
+					.status(BookingStatus.PAGADA)
 					.checkInDate(LocalDate.of(2025, 7, 10))
 					.checkOutDate(LocalDate.of(2025, 7, 13))
 					.totalPrice(BigDecimal.valueOf(955997))
@@ -375,7 +380,7 @@ public class RoomifybackendApplication {
 					.phoneNumber(userCamila.getPhoneNumber())
 					.roomType(roomType2)
 					.bookingDate(LocalDateTime.now())
-					.status(BookingStatus.CONFIRMADA)
+					.status(BookingStatus.PAGADA)
 					.checkInDate(LocalDate.of(2025, 7, 2))
 					.checkOutDate(LocalDate.of(2025, 7, 6))
 					.totalPrice(BigDecimal.valueOf(643996))
@@ -383,6 +388,66 @@ public class RoomifybackendApplication {
 					.build();
 
 			bookingRepository.saveAll(List.of(booking1, booking2, booking3, booking4, booking5, booking6));
+
+			//Payments
+			String preferenceId1 = "2509326300-" + UUID.randomUUID();
+			String preferenceId2 = "2509326300-" + UUID.randomUUID();
+			String preferenceId3 = "2509326300-" + UUID.randomUUID();
+			String preferenceId4 = "2509326300-" + UUID.randomUUID();
+			String preferenceId5 = "2509326300-" + UUID.randomUUID();
+			String preferenceId6 = "2509326300-" + UUID.randomUUID();
+
+			PaymentEntity payment1 = PaymentEntity.builder()
+					.booking(booking1)
+					.preference_id(preferenceId1) // Puedes inventar este valor
+					.status(PaymentStatus.APPROVED)
+					.amount(booking1.getTotalPrice())
+					.created_at(LocalDateTime.now())
+					.build();
+
+			PaymentEntity payment2 = PaymentEntity.builder()
+					.booking(booking2)
+					.preference_id(preferenceId2)
+					.status(PaymentStatus.APPROVED)
+					.amount(booking2.getTotalPrice())
+					.created_at(LocalDateTime.now())
+					.build();
+
+			PaymentEntity payment3 = PaymentEntity.builder()
+					.booking(booking3)
+					.preference_id(preferenceId3)
+					.status(PaymentStatus.APPROVED)
+					.amount(booking3.getTotalPrice())
+					.created_at(LocalDateTime.now())
+					.build();
+
+			PaymentEntity payment4 = PaymentEntity.builder()
+					.booking(booking4)
+					.preference_id(preferenceId4) // Puedes inventar este valor
+					.status(PaymentStatus.APPROVED)
+					.amount(booking4.getTotalPrice())
+					.created_at(LocalDateTime.now())
+					.build();
+
+			PaymentEntity payment5 = PaymentEntity.builder()
+					.booking(booking5)
+					.preference_id(preferenceId5)
+					.status(PaymentStatus.APPROVED)
+					.amount(booking5.getTotalPrice())
+					.created_at(LocalDateTime.now())
+					.build();
+
+			PaymentEntity payment6 = PaymentEntity.builder()
+					.booking(booking6)
+					.preference_id(preferenceId6)
+					.status(PaymentStatus.APPROVED)
+					.amount(booking6.getTotalPrice())
+					.created_at(LocalDateTime.now())
+					.build();
+
+			paymentRepository.saveAll(List.of(payment1, payment2, payment3, payment4, payment5, payment6));
+
+			//Rooms
 
 			RoomEntity room101 = RoomEntity.builder()
 					.room_number("101")

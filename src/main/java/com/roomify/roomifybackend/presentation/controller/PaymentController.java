@@ -2,6 +2,7 @@ package com.roomify.roomifybackend.presentation.controller;
 
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
+import com.roomify.roomifybackend.persistence.entity.FiltersPayments;
 import com.roomify.roomifybackend.persistence.entity.PageResult;
 import com.roomify.roomifybackend.presentation.dto.request.SavePaymentRequest;
 import com.roomify.roomifybackend.presentation.dto.response.PaymentResponse;
@@ -28,8 +29,8 @@ public class PaymentController {
     }
 
     @GetMapping
-    public ResponseEntity<PageResult<PaymentResponse>> getPayments(Integer page, Integer size, boolean orderAsc) {
-        PageResult<PaymentResponse> paymentResponsePageResult = paymentService.getPayments(page, size, orderAsc);
+    public ResponseEntity<PageResult<PaymentResponse>> getPayments(Integer page, Integer size, boolean orderAsc, @ModelAttribute FiltersPayments filtersPayments) {
+        PageResult<PaymentResponse> paymentResponsePageResult = paymentService.getPayments(page, size, orderAsc, filtersPayments);
         return ResponseEntity.ok(paymentResponsePageResult);
     }
     

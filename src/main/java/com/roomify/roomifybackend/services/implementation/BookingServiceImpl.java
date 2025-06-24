@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -85,13 +86,15 @@ public class BookingServiceImpl implements IBookingService {
         booking.setTotalPrice(totalBookingPrice);
         String numberBooking = BookingHelper.generateUniqueReservationNumber();
         booking.setReservationNumber(numberBooking);
+        booking.setStatus(BookingStatus.PENDIENTE);
         bookingRepository.save(booking);
         return new SaveBookingResponse("Reserva creada", booking.getId(), LocalDate.now());
     }
 
     @Override
-    public PageResult<BookingResponse> getAllBookings(Integer page, Integer size, FiltersBooking filtersBooking) {
-        Pageable paging = PageRequest.of(page, size);
+    public PageResult<BookingResponse> getAllBookings(Integer page, Integer size, boolean orderAsc, FiltersBooking filtersBooking) {
+        Sort sort = orderAsc ? Sort.by("checkInDate").ascending() : Sort.by("checkInDate").descending();
+        Pageable paging = PageRequest.of(page, size, sort);
         SearchBookingSpecificaction spec = new SearchBookingSpecificaction(
                 filtersBooking.numberBooking(),
                 filtersBooking.checkInDate(),
@@ -165,6 +168,8 @@ public class BookingServiceImpl implements IBookingService {
 
     @Override
     public void updatePaymentStatus(Long bookingId, String mpStatus) {
+        System.out.println(bookingId);
+        System.out.println(mpStatus);
         BookingEntity bookingFound = bookingRepository.findById(bookingId).orElse(null);
 
         if (bookingFound == null) {

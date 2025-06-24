@@ -26,8 +26,8 @@ public class BookingController {
     }
 
     @GetMapping
-    public ResponseEntity<PageResult<BookingResponse>> getBooking(Integer page, Integer size, @ModelAttribute FiltersBooking filtersBooking) {
-        PageResult<BookingResponse> bookings = bookingService.getAllBookings(page, size, filtersBooking);
+    public ResponseEntity<PageResult<BookingResponse>> getBooking(Integer page, Integer size, boolean orderAsc, @ModelAttribute FiltersBooking filtersBooking) {
+        PageResult<BookingResponse> bookings = bookingService.getAllBookings(page, size, orderAsc, filtersBooking);
         return ResponseEntity.ok(bookings);
     }
 

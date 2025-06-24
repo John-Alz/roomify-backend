@@ -7,10 +7,7 @@ import com.mercadopago.client.preference.PreferenceRequest;
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.preference.Preference;
-import com.roomify.roomifybackend.persistence.entity.BookingEntity;
-import com.roomify.roomifybackend.persistence.entity.PageResult;
-import com.roomify.roomifybackend.persistence.entity.PaymentEntity;
-import com.roomify.roomifybackend.persistence.entity.PaymentStatus;
+import com.roomify.roomifybackend.persistence.entity.*;
 import com.roomify.roomifybackend.persistence.repository.BookingRepository;
 import com.roomify.roomifybackend.persistence.repository.PaymentRepository;
 import com.roomify.roomifybackend.presentation.dto.request.SavePaymentRequest;
@@ -19,6 +16,7 @@ import com.roomify.roomifybackend.presentation.dto.response.SaveResponse;
 import com.roomify.roomifybackend.presentation.mappers.PaymentMapper;
 import com.roomify.roomifybackend.services.exception.NoExistException;
 import com.roomify.roomifybackend.services.interfaces.IPaymentService;
+import com.roomify.roomifybackend.specification.SearchPaymentSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -65,7 +63,7 @@ public class PaymentService implements IPaymentService {
             PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                     .items(items)
                     .externalReference(paymentRequest.bookingId().toString())
-                    .notificationUrl("https://b96a-181-237-46-8.ngrok-free.app/api/v1/mercadopago/webhook?source_news=webhooks")
+                    .notificationUrl("https://df34-181-237-95-103.ngrok-free.app/api/v1/mercadopago/webhook?source_news=webhooks")
 
 //                    .autoReturn("approved")
                     .build();
@@ -92,9 +90,17 @@ public class PaymentService implements IPaymentService {
     }
 
     @Override
-    public PageResult<PaymentResponse> getPayments(Integer page, Integer size, boolean orderAsc) {
+    public PageResult<PaymentResponse> getPayments(Integer page, Integer size, boolean orderAsc, FiltersPayments filtersPayments) {
         Pageable paging = PageRequest.of(page, size);
-        Page<PaymentEntity> paymentPage = paymentRepository.findAll(paging);
+        SearchPaymentSpecification spec = new SearchPaymentSpecification(
+                filtersPayments.numberBooking(),
+                filtersPayments.dateFromPayment(),
+                filtersPayments.dateToPayment(),
+                filtersPayments.priceMin(),
+                filtersPayments.roomTypeId(),
+                filtersPayments.status()
+        );
+        Page<PaymentEntity> paymentPage = paymentRepository.findAll(spec, paging);
         List<PaymentResponse> paymentResponseList = paymentMapper.toListResponse(paymentPage.getContent());
         return new PageResult<>(
                 paymentResponseList,
