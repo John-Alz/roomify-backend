@@ -2,12 +2,17 @@ package com.roomify.roomifybackend.presentation.controller;
 
 import com.roomify.roomifybackend.presentation.dto.request.AuthLoginRequest;
 import com.roomify.roomifybackend.presentation.dto.request.AuthRegisterUserRequest;
+import com.roomify.roomifybackend.presentation.dto.request.ResetPasswordRequest;
+import com.roomify.roomifybackend.presentation.dto.request.SendEmailResetRequest;
 import com.roomify.roomifybackend.presentation.dto.response.AuthResponse;
 import com.roomify.roomifybackend.presentation.dto.response.ProfileResponse;
+import com.roomify.roomifybackend.presentation.dto.response.SaveResponse;
+import com.roomify.roomifybackend.services.implementation.PasswordResetService;
 import com.roomify.roomifybackend.services.implementation.UserDetailServiceImpl;
 import com.roomify.roomifybackend.services.implementation.UserSerVice;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,9 +21,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
     @Autowired
@@ -26,11 +34,13 @@ public class AuthController {
     @Autowired
     private UserSerVice userSerVice;
 
+    private final PasswordResetService passwordResetService;
+
     @PostMapping("/log-in")
     public ResponseEntity<AuthResponse> login(@RequestBody @Valid AuthLoginRequest userRequest) {
         AuthResponse authResponse = this.userDetailService.loginUser(userRequest);
         ResponseCookie jwtCookie = ResponseCookie.from("jwtToken", authResponse.jwt())
-                .httpOnly(true)
+                .httpOnly(false)
                 .secure(false)
                 .path("/")
                 .maxAge(3600)
@@ -49,7 +59,7 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletResponse response) {
         ResponseCookie jwtCookie = ResponseCookie.from("jwtToken", "")
-                .httpOnly(true)
+                .httpOnly(false)
                 .secure(true)
                 .path("/")
                 .maxAge(0)
@@ -64,6 +74,19 @@ public class AuthController {
         System.out.println("email found: " + email);
         ProfileResponse profileResponse = userSerVice.getProfile(email);
         return ResponseEntity.ok(profileResponse);
+    }
+
+    @PostMapping("/request-password-reset")
+    public ResponseEntity<SaveResponse> requestReset(@RequestBody SendEmailResetRequest emailResetRequest) {
+        passwordResetService.sendResetLink(emailResetRequest.email());
+        return ResponseEntity.ok(new SaveResponse("Se ha enviado un correo con instrucciones para restablecer tu contraseña.", LocalDate.now()));
+    }
+
+    // 🟢 2. Resetear la contraseña con el token
+    @PostMapping("/reset-password")
+    public ResponseEntity<SaveResponse> resetPassword(@RequestBody ResetPasswordRequest request) {
+        passwordResetService.resetPassword(request.token(), request.newPassword());
+        return ResponseEntity.ok(new SaveResponse("Tu contraseña ha sido actualizada exitosamente.", LocalDate.now()));
     }
 
 }

@@ -62,7 +62,7 @@ public class RoomifybackendApplication {
 			UserEntity userJohn = UserEntity.builder()
 					.username("John")
 					.lastName("Angel")
-					.email("john@gmail.com")
+					.email("jairoanngelll@gmail.com")
 					.phoneNumber("3156783542")
 					.birthday(LocalDate.of(2003, 07, 26))
 					.password("$2a$10$ijSt4zfkR7Gth3hY8huOl.eO.LARyYhiAfRpwtC5pWFord.65oOCa")

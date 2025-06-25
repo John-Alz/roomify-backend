@@ -47,6 +47,18 @@ public class JwtUtils {
                 .sign(algorithm);
     }
 
+    public String createResetToken(String email) {
+        Algorithm algorithm = Algorithm.HMAC256(this.privateKey);
+
+        return JWT.create()
+                .withIssuer(this.userGenerator)
+                .withSubject(email)
+                .withIssuedAt(new Date())
+                .withExpiresAt(new Date(System.currentTimeMillis() + 15 * 60 * 1000)) // 15 minutos
+                .withJWTId(UUID.randomUUID().toString())
+                .sign(algorithm);
+    }
+
     public DecodedJWT verifyToken(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(this.privateKey);
