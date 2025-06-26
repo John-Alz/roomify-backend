@@ -450,15 +450,15 @@ public class RoomifybackendApplication {
 					.created_at(LocalDateTime.now())
 					.build();
 
-			PaymentEntity payment6 = PaymentEntity.builder()
-					.booking(booking6)
-					.preference_id(preferenceId6)
-					.status(PaymentStatus.APPROVED)
-					.amount(booking6.getTotalPrice())
-					.created_at(LocalDateTime.now())
-					.build();
+//			PaymentEntity payment6 = PaymentEntity.builder()
+//					.booking(booking6)
+//					.preference_id(preferenceId6)
+//					.status(PaymentStatus.APPROVED)
+//					.amount(booking6.getTotalPrice())
+//					.created_at(LocalDateTime.now())
+//					.build();
 
-			paymentRepository.saveAll(List.of(payment1, payment2, payment3, payment4, payment5, payment6));
+			paymentRepository.saveAll(List.of(payment1, payment2, payment3, payment4, payment5));
 
 			//Rooms
 

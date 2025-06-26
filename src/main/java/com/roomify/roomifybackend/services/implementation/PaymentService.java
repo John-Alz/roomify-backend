@@ -18,6 +18,7 @@ import com.roomify.roomifybackend.services.exception.NoExistException;
 import com.roomify.roomifybackend.services.interfaces.IPaymentService;
 import com.roomify.roomifybackend.specification.SearchPaymentSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -38,17 +39,19 @@ public class PaymentService implements IPaymentService {
     private final BookingRepository bookingRepository;
     private final PaymentMapper paymentMapper;
 
+    @Value("${access-token-mcdp}")
+    private String accessToken;
+
     @Override
     public SaveResponse savePayment(SavePaymentRequest paymentRequest) throws MPException, MPApiException {
+        MercadoPagoConfig.setAccessToken(accessToken);
+
         BookingEntity bookingFound = bookingRepository.findById(paymentRequest.bookingId()).orElse(null);
         if (bookingFound == null) {
             throw new NoExistException("La reserva no existe");
         }
         System.out.println("La reserva con id: " + paymentRequest.bookingId() + " EXISTE.");
 
-        MercadoPagoConfig.setAccessToken("APP_USR-7625381313308330-062000-881e810befa67467c5382daff4cac8ae-2509326300");
-
-        try {
             PreferenceItemRequest itemRequest = PreferenceItemRequest.builder()
                     .id("roomify-" + bookingFound.getId())
                     .title("Reserva en habitación: " + bookingFound.getRoomType().getName() + " X" + bookingFound.getNumberOfRoom())
@@ -62,10 +65,6 @@ public class PaymentService implements IPaymentService {
 
             PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                     .items(items)
-                    .externalReference(paymentRequest.bookingId().toString())
-                    .notificationUrl("https://e78c-186-102-33-120.ngrok-free.app/api/v1/mercadopago/webhook?source_news=webhooks")
-
-//                    .autoReturn("approved")
                     .build();
 
             PreferenceClient client = new PreferenceClient();
@@ -80,13 +79,6 @@ public class PaymentService implements IPaymentService {
                     .build();
             paymentRepository.save(paymentEntity);
             return new SaveResponse(preference.getSandboxInitPoint(), LocalDate.now());
-
-        } catch (MPApiException e) {
-            System.out.println("🛑 API ERROR BODY:");
-            System.out.println(e.getApiResponse().getContent());
-
-            throw new RuntimeException("Error al crear preferencia de pago con Mercado Pago");
-        }
     }
 
     @Override
