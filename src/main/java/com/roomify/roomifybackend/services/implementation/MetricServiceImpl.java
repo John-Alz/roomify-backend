@@ -47,8 +47,8 @@ public class MetricServiceImpl implements IMetricsService {
         Double cancelledGrowth = MetricsHelper.calculateGrowth(previousCancellations, currentCancellations);
 
         // INGRESOS
-        BigDecimal currentRevenue = bookingRepository.sumPaidTotalPriceByMonth(currentMonthValue, lastYear, BookingStatus.PAGADA);
-        BigDecimal previousRevenue = bookingRepository.sumPaidTotalPriceByMonth(lastMonthValue, lastYear, BookingStatus.PAGADA);
+        BigDecimal currentRevenue = bookingRepository.sumPaidTotalPriceByMonth(currentMonthValue, lastYear, BookingStatus.CONFIRMADA);
+        BigDecimal previousRevenue = bookingRepository.sumPaidTotalPriceByMonth(lastMonthValue, lastYear, BookingStatus.CONFIRMADA);
         Double revenueGrowth = MetricsHelper.calculateGrowth(previousRevenue, currentRevenue);
 
         return new MetricsResponse(

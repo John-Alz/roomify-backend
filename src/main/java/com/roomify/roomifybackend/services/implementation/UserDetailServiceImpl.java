@@ -98,6 +98,11 @@ public class UserDetailServiceImpl implements UserDetailsService {
     }
 
     public AuthResponse registerUser(AuthRegisterUserRequest registerUserRequest) {
+        UserEntity userFound = userRepository.findByEmail(registerUserRequest.email()).orElse(null);
+        if(userFound != null) {
+            throw new NoExistException("El correo ya esta asociado a otro usuario.");
+        }
+
         String username = registerUserRequest.username();
         String lastName = registerUserRequest.lastName();
         String email = registerUserRequest.email();

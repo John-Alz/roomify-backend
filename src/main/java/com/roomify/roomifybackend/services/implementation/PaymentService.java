@@ -63,7 +63,7 @@ public class PaymentService implements IPaymentService {
             PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                     .items(items)
                     .externalReference(paymentRequest.bookingId().toString())
-                    .notificationUrl("https://df34-181-237-95-103.ngrok-free.app/api/v1/mercadopago/webhook?source_news=webhooks")
+                    .notificationUrl("https://e78c-186-102-33-120.ngrok-free.app/api/v1/mercadopago/webhook?source_news=webhooks")
 
 //                    .autoReturn("approved")
                     .build();
@@ -109,5 +109,14 @@ public class PaymentService implements IPaymentService {
                 paymentPage.getTotalPages(),
                 paymentPage.getTotalElements()
         );
+    }
+
+    @Override
+    public PaymentResponse getPayment(Long paymentId) {
+        PaymentEntity paymentFound = paymentRepository.findById(paymentId).orElse(null);
+        if (paymentFound == null) {
+            throw new NoExistException("E l pago con este id no existe.");
+        }
+        return paymentMapper.toResponse(paymentFound);
     }
 }

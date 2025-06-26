@@ -33,5 +33,11 @@ public class PaymentController {
         PageResult<PaymentResponse> paymentResponsePageResult = paymentService.getPayments(page, size, orderAsc, filtersPayments);
         return ResponseEntity.ok(paymentResponsePageResult);
     }
+
+    @GetMapping("{paymentId}")
+    public ResponseEntity<PaymentResponse> getPayment(@PathVariable Long paymentId) {
+        PaymentResponse paymentResponse = paymentService.getPayment(paymentId);
+        return ResponseEntity.ok(paymentResponse);
+    }
     
 }

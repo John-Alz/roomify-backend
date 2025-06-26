@@ -14,4 +14,6 @@ public interface IPaymentService {
 
     PageResult<PaymentResponse> getPayments(Integer page, Integer size, boolean orderAsc, FiltersPayments filtersPayments);
 
+    PaymentResponse getPayment(Long paymentId);
+
 }
